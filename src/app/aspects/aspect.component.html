@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="card-header">
+      {{title}}
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table mb-0"
+               *ngIf="aspects && aspects.length">
+          <tbody>
+            <tr *ngFor="let aspect of aspects">
+              <td>
+                <a [routerLink]="['/aspects', aspect.id]">
+                  {{ aspect.name }}
+                </a>
+              </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm"
+                        [routerLink]="['/aspects', aspect.id, 'edit']">
+                  Edit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+  
+  <div *ngIf="errorMessage"
+       class="alert alert-danger">
+    Error: {{ errorMessage }}
+  </div>
