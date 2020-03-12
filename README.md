@@ -1,15 +1,10 @@
-<<<<<<< HEAD
 # GraphComposer
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.24.
+This is being developed to provide a client for editing multilayer graphs.  This will eventually use a server based on one of the repositories [Graphs](https://github.com/smohr1824/Graphs) or [Networks](https://github.com/smohr1824/Networks). The client will retain enough state to render a graph, but actions with side-effects, e.g., node deletion, will be performed on the server and result in a refresh of the client's state.  All algorithms, e.g., community detection, bipartness testing, will occur on the server.  Ultimately, it is the intention to provide progressive web application functionality such that a graph can be built offline and saved in GML format for later upload to the server.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
@@ -26,7 +21,3 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-=======
-# graph-composer
-Angular app for multilayer graphs
->>>>>>> ce857e844eab2b128ddbe0cbe29ecdb7cb2be8ff
