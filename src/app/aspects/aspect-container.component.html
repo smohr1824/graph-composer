@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col-md-6">
+        <app-aspects-list [aspects]="aspects" (aspectSelected)="selected($event)"></app-aspects-list>
+    </div>
+    <div class="col-md-6">
+        <app-layerset-list [aspect]="currentAspect"></app-layerset-list>
+    </div>
+</div>

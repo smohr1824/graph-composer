@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header">
+      {{title}}
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table mb-0"
+               *ngIf="aspects && aspects.length">
+          <tbody>
+            <tr *ngFor="let aspect of aspects" (click)="selectAspect(aspect)">
+              <td>
+                  {{ aspect.name }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>

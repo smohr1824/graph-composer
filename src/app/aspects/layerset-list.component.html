@@ -1,0 +1,19 @@
+<div class="card">
+    <div *ngIf="aspect" class="card-header">
+      {{aspect.name}}
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table mb-0"
+               *ngIf="aspect && aspect.layerSet && aspect.layerSet.length">
+          <tbody>
+            <tr *ngFor="let layer of aspect.layerSet">
+              <td>
+                  {{ layer }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>

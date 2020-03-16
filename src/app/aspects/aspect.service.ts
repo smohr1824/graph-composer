@@ -16,12 +16,10 @@ export class AspectService {
 
 const ASPECTS = [
   {
-    id: 1,
     name: 'System',
     layerSet: ['flow', 'electrical', 'control']
   },
   {
-    id: 2,
     name: 'Location',
     layerSet: ['SLTC', 'PHL', 'PHX', 'JC']
   }
