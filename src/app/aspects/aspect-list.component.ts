@@ -10,6 +10,7 @@ export class AspectListComponent implements OnInit {
   private title: string = "Aspects";
   @Input() aspects: Aspect[];
   @Output() aspectSelected = new EventEmitter<Aspect>();
+  @Output() aspectDelete = new EventEmitter<number>();
 
   constructor() { }
 
@@ -18,5 +19,9 @@ export class AspectListComponent implements OnInit {
 
   selectAspect(aspect: Aspect) {
     this.aspectSelected.emit(aspect);
+  }
+
+  deleteAspect(id: number) {
+    this.aspectDelete.emit(id);
   }
 }

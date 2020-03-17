@@ -21,4 +21,9 @@ currentAspect: Aspect;
     this.currentAspect = aspect;
   }
 
+  deleteAspect(id: number) {
+    this.aspects = this.aspects.filter((item, _) => item.id === id);
+  }
+
 }
+

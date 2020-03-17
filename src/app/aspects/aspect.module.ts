@@ -3,20 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AspectService } from './aspect.service';
 import { AspectComponent } from './aspect.component';
-import { AspectEditComponent } from './aspect-edit.component';
 import { AspectContainerComponent } from './aspect-container.component';
 import { AspectListComponent } from './aspect-list.component';
 import { LayersetListComponent } from './layerset-list.component';
 
 
 const aspectRoutes: Routes = [
-  { path: 'aspects/:id', component: AspectEditComponent},
+  { path: 'aspects/:id', component: AspectComponent},
 ];
 
 @NgModule({
   declarations: [
     AspectComponent,
-    AspectEditComponent,
     AspectContainerComponent,
     AspectListComponent,
     LayersetListComponent

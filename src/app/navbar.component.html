@@ -2,26 +2,32 @@
     <a class="navbar-brand" href="#">
       Multilayer Network
     </a>
-  
     <button class="navbar-toggler" type="button"
             (click)="toggleNavbar()">
       <span class="navbar-toggler-icon"></span>
     </button>
-  
-  
     <div class="collapse navbar-collapse"
          [ngClass]="{ 'show': navbarOpen }">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" [routerLink]="['/aspects']">Aspects</a>
         </li>
-  
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/actors']">Actors</a>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          Actors
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" [routerLink]="['/actors']">List Actors</a>
+          <a class="dropdown-item" href="#">Add Actor</a>
+        </div>
+      </li>
         <li class="nav-item">
             <a class="nav-link" [routerLink]="['/ElementaryLayer']">Elementary Layer</a>
           </li>
       </ul>
     </div>
   </nav>
+
+
+
+

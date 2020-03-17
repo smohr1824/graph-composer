@@ -11,6 +11,18 @@
               <td>
                   {{ aspect.name }}
               </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm"
+                  [routerLink]="['/aspects', aspect.id, 'edit']">
+                  Edit
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm" 
+                  (click)="deleteAspect(aspect.id)">
+                  Delete
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
