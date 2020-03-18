@@ -1,11 +1,11 @@
-<div class="card">
+<div class="card" *ngIf="aspect && aspect.layerSet && aspect.layerSet.length">
     <div *ngIf="aspect" class="card-header">
       {{aspect.name}} Layersets
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table mb-0"
-               *ngIf="aspect && aspect.layerSet && aspect.layerSet.length">
+               >
           <tbody>
             <tr *ngFor="let layer of aspect.layerSet">
               <td>

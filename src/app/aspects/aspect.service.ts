@@ -12,9 +12,22 @@ export class AspectService {
   getAspects(): Aspect[] {
     return ASPECTS;
   }
+
+  getAspect(id:number): Aspect {
+    return ASPECTS.find(x => x.id === id);
+  }
+
+  saveAspect(aspect: Aspect){
+    const index = ASPECTS.findIndex((asp:Aspect) => asp.id === aspect.id);
+    if (index === -1) {
+      ASPECTS = [...ASPECTS, aspect];      
+    } else {
+      ASPECTS = [...ASPECTS.slice(0, index), aspect, ...ASPECTS.slice(index + 1)];
+    }
+  }
 }
 
-const ASPECTS = [
+let ASPECTS = [
   {
     name: 'System',
     id: 0,

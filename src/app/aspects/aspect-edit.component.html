@@ -1,0 +1,72 @@
+<div class="card">
+    <div class="card-header">
+      {{cardTitle}}
+    </div>
+    <div class="card-body">
+        <form novalidate
+            (submit)="save()" 
+            [formGroup]="aspectForm">
+            <div class="form-group row mb-2"> 
+                <label class="col-md-2 col-form-label"
+               for="aspectNameId">Aspect</label>
+               <div class="col-md-8">
+                <input class="form-control"
+                id="aspectNameId"
+                type="text"
+                placeholder="Aspect Name (required)"
+                formControlName="aspectName"
+                [ngClass]="{'is-invalid': (aspectForm.get('aspectName').touched ||
+                                           aspectForm.get('aspectName').dirty) &&
+                                           !aspectForm.get('aspectName').valid }" />
+               </div>
+            </div>
+            <div formArrayName="layersets"> 
+                <div [formGroupName]="i"
+                  *ngFor="let layerset of layersets.controls; let i=index">
+                  <div class="form-group row mb-2">
+                    <label class="col-md-2 col-form-label"
+                           attr.for="{{'layersetId' + i}}">Layerset Name</label>
+                    <div class="col-md-8">
+                      <input class="form-control"
+                             id="{{ 'layersetId' + i }}"
+                             type="text"
+                             placeholder="Layerset Name (required)"
+                             formControlName="layersetName"
+                             [ngClass]="{'is-invalid': (layerset.controls.layersetName.touched || 
+                                                        layerset.controls.layersetName.dirty) && 
+                                                        !layerset.controls.layersetName.valid }">
+                      <span class="invalid-feedback">
+                        <span *ngIf="layerset.controls.layersetName.errors?.required">
+                          Please enter a layerset name.
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <div class="col-md-4">
+                  <button class="btn btn-outline-primary"
+                          type="button"
+                          [title]="layersets.valid ? 'Add another layerset' : 'Disabled until the existing layerset name is valid'"
+                          [disabled]="!layersets.valid"
+                          (click)="addLayerset()">
+                    Add Another Layerset
+                  </button>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <div class="col-md-4">
+                  <button class="btn btn-primary mr-3"
+                          type="submit"
+                          style="width:80px"
+                          [title]="aspectForm.valid ? 'Save this aspect' : 'Disabled until the form data is valid'"
+                          [disabled]="!aspectForm.valid">
+                    Save
+                  </button>
+                 </div>
+              </div>
+        </form>
+    </div>
+</div>

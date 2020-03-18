@@ -22,7 +22,7 @@ currentAspect: Aspect;
   }
 
   deleteAspect(id: number) {
-    this.aspects = this.aspects.filter((item, _) => item.id === id);
+    this.aspects = this.aspects.filter((item, _) => item.id != id);
   }
 
 }

@@ -13,7 +13,7 @@
               </td>
               <td>
                 <button class="btn btn-outline-primary btn-sm"
-                  [routerLink]="['/aspects', aspect.id, 'edit']">
+                  [routerLink]="['/aspects', aspect.id]">
                   Edit
                 </button>
               </td>
@@ -23,6 +23,15 @@
                   Delete
                 </button>
               </td>
+            </tr>
+            <tr>
+              <td>
+                <button class="btn btn-primary btn-sm"
+                  [routerLink]="['/aspects', '-1']">
+                  Add Aspect
+                </button>
+              </td>
+              <td></td>
             </tr>
           </tbody>
         </table>
