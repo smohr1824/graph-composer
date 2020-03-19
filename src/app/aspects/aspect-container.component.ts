@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Aspect } from './aspect';
-import { AspectService } from './aspect.service';
+import { Aspect } from '../shared/aspect';
+import { AspectService } from '../shared/aspect.service';
 
 @Component({
   selector: 'app-aspect-container',
@@ -22,6 +22,7 @@ currentAspect: Aspect;
   }
 
   deleteAspect(id: number) {
+    this.aspectService.deleteAspect(id);
     this.aspects = this.aspects.filter((item, _) => item.id != id);
   }
 

@@ -25,6 +25,20 @@ export class AspectService {
       ASPECTS = [...ASPECTS.slice(0, index), aspect, ...ASPECTS.slice(index + 1)];
     }
   }
+
+  deleteAspect(id: number) {
+    const index = ASPECTS.findIndex((asp:Aspect) => asp.id === id);
+    if (index != -1) {
+      ASPECTS = ASPECTS.filter((item, _) => item.id != id);
+    }
+  }
+
+  aspectsAvailable() {
+    if (ASPECTS.length > 0) {
+      return true;
+    }
+    return false;
+  }
 }
 
 let ASPECTS = [

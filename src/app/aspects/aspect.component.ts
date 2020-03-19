@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AspectService } from './aspect.service';
-import { Aspect } from './aspect';
+import { AspectService } from '../shared/aspect.service';
+import { Aspect } from '../shared/aspect';
 
 @Component({
   selector: 'app-aspect',

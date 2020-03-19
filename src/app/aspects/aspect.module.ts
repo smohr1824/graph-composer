@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AspectService } from './aspect.service';
+import { AspectService } from '../shared/aspect.service';
 import { AspectComponent } from './aspect.component';
 import { AspectContainerComponent } from './aspect-container.component';
 import { AspectListComponent } from './aspect-list.component';

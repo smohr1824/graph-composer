@@ -11,7 +11,7 @@
                for="aspectNameId">Aspect</label>
                <div class="col-md-8">
                 <input class="form-control"
-                id="aspectNameId"
+                id="aspectName"
                 type="text"
                 placeholder="Aspect Name (required)"
                 formControlName="aspectName"
@@ -20,53 +20,71 @@
                                            !aspectForm.get('aspectName').valid }" />
                </div>
             </div>
-            <div formArrayName="layersets"> 
-                <div [formGroupName]="i"
-                  *ngFor="let layerset of layersets.controls; let i=index">
-                  <div class="form-group row mb-2">
+            <div class="col-mb-2">
+              <div class="row mb-2">
+                <div class="col-md-4">
+                  <button class="btn btn-outline-primary"
+                          type="button"
+                          [title]="layersets.valid ? 'Add layerset' : 'Disabled until the existing layerset name is valid'"
+                          [disabled]="!aspectForm.get('aspectName').valid"
+                          (click)="addLayerset()">
+                    Add Layerset
+                  </button>
+                </div>
+              </div>
+              <hr/>
+              <div>Layersets:</div>
+              <br/>
+              <div class="left">
+                <ul class="list-unstyled" formArrayName="layersets"> 
+                  <li [formGroupName]="i"
+                    *ngFor="let layerset of layersets.controls; let i=index">
+                    <div class="form-group row mb-2" >
                     <label class="col-md-2 col-form-label"
-                           attr.for="{{'layersetId' + i}}">Layerset Name</label>
-                    <div class="col-md-8">
-                      <input class="form-control"
-                             id="{{ 'layersetId' + i }}"
+                      for="i">Name</label>
+                      <div class="col-md-6">
+                    <input class="form-control"
+                             id="layersetNameId"
                              type="text"
                              placeholder="Layerset Name (required)"
                              formControlName="layersetName"
                              [ngClass]="{'is-invalid': (layerset.controls.layersetName.touched || 
                                                         layerset.controls.layersetName.dirty) && 
                                                         !layerset.controls.layersetName.valid }">
-                      <span class="invalid-feedback">
-                        <span *ngIf="layerset.controls.layersetName.errors?.required">
+                      </div>
+                      <div class="col-md-4">
+                    <button class="btn btn-outline-primary" (click)="removeAt(i)">X</button>
+                      </div>
+                    <span class="invalid-feedback">
+                      <span *ngIf="layerset.controls.layersetName.errors?.required">
                           Please enter a layerset name.
-                        </span>
                       </span>
+                    </span>
                     </div>
-                  </div>
-                </div>
-            </div>
-            <div class="form-group row mb-2">
-                <div class="col-md-4">
-                  <button class="btn btn-outline-primary"
-                          type="button"
-                          [title]="layersets.valid ? 'Add another layerset' : 'Disabled until the existing layerset name is valid'"
-                          [disabled]="!layersets.valid"
-                          (click)="addLayerset()">
-                    Add Another Layerset
-                  </button>
-                </div>
-            </div>
-
-            <div class="form-group row mb-2">
-                <div class="col-md-4">
-                  <button class="btn btn-primary mr-3"
-                          type="submit"
-                          style="width:80px"
-                          [title]="aspectForm.valid ? 'Save this aspect' : 'Disabled until the form data is valid'"
-                          [disabled]="!aspectForm.valid">
-                    Save
-                  </button>
-                 </div>
+                  </li>
+                </ul>
               </div>
+            </div>
+            <hr/>
+            <div class="form-group row mb-2">
+              <div class="col-md-2">
+                <button class="btn btn-primary mr-3"
+                        type="submit"
+                        style="width:80px"
+                        [title]="aspectForm.valid ? 'Save this aspect' : 'Disabled until the form data is valid'">
+                    Save
+                </button>
+              </div>
+              <div class="col-md-2">
+                <button class="btn  btn-primary mr-3"
+                        (click)="cancel()"
+                        type="button"
+                        style="width:80px"
+                        [title]="'Cancel aspect'">
+                      Cancel
+                </button>
+              </div>
+            </div>
         </form>
     </div>
 </div>

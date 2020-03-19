@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {  IdService } from './id.service';
 import { WelcomeComponent } from './welcome.component'
+import { AspectService } from './aspect.service';
 
 
 @NgModule({
@@ -10,7 +11,8 @@ import { WelcomeComponent } from './welcome.component'
     CommonModule
   ],
   providers: [
-    IdService
+    IdService,
+    AspectService
   ]
 })
 export class SharedModule { }

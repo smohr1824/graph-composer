@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
-import { AspectService } from './aspect.service';
-import { Aspect } from './aspect';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray, FormControl } from '@angular/forms';
+import { AspectService } from '../shared/aspect.service';
+import { Aspect } from '../shared/aspect';
 import { IdService } from '../shared/id.service';
 
 @Component({
@@ -31,13 +31,11 @@ export class AspectEditComponent implements OnInit {
 
     if (id === -1 || this.aspect == null) {
       this.cardTitle = 'Add New Aspect';
-      console.log('new aspect');
       this.aspect = new Aspect();
       this.aspect.layerSet = [];
       this.aspect.id = this.idService.nextAspectId();
     } else {
       this.cardTitle = 'Edit Aspect';
-      console.log('existing aspect: ' + id);
     }
 
     this.aspectForm = this.fb.group({
@@ -49,12 +47,18 @@ export class AspectEditComponent implements OnInit {
 
   addLayerset(): void {
     this.layersets.push(this.buildLayerset());
+    //this.layersets.push(new FormControl('', [Validators.required]))
+    //console.log(this.layersets.controls[0]);
   }
 
   buildLayerset(): FormGroup {
     return this.fb.group({
       layersetName: ['', Validators.required],
     });
+  }
+
+  removeAt(index: number) {
+    this.layersets.removeAt(index);
   }
 
   save() {
@@ -64,9 +68,13 @@ export class AspectEditComponent implements OnInit {
       this.aspect.layerSet.push(element.layersetName);
     });
 
-    console.log(this.aspect);
     this.aspectService.saveAspect(this.aspect);
      this.router.navigate(['/aspects']);
+  }
+
+  cancel() {
+    this.aspectForm.markAsPristine();
+    this.router.navigate(['/aspects']);
   }
 
 }

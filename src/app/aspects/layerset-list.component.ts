@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Aspect } from './aspect';
+import { Aspect } from '../shared/aspect';
 
 @Component({
   selector: 'app-layerset-list',

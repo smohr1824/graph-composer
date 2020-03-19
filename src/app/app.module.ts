@@ -8,6 +8,7 @@ import { AspectModule } from './aspects/aspect.module';
 import { NavbarComponent } from './navbar.component';
 import { SharedModule } from './shared/shared.module';
 import { IdService } from './shared/id.service';
+import { LayersModule } from './layers/layers.module';
 
 @NgModule({
   declarations: [
@@ -18,11 +19,13 @@ import { IdService } from './shared/id.service';
   imports: [
     BrowserModule,
     AspectModule,
+    LayersModule,
     SharedModule,
     AppRoutingModule,
   ],
   providers: [ 
-    IdService ],
+            IdService 
+          ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
