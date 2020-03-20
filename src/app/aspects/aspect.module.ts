@@ -35,6 +35,7 @@ import { PageNotFoundComponent } from '../shared/page-not-found.component';
           {
             path: ':id',
             component: AspectEditComponent,
+            canDeactivate: ['canDeactivateEdit'],
             children: [
               { path: '', redirectTo: 'aspects', pathMatch: 'full' },
             ]
@@ -44,8 +45,18 @@ import { PageNotFoundComponent } from '../shared/page-not-found.component';
     ])
   ], 
   providers: [
-    AspectService
+    AspectService,
+    { provide: 'canDeactivateEdit', useValue: checkDirtyState }
   ]
 
 })
 export class AspectModule { }
+
+export function checkDirtyState(component: AspectEditComponent): boolean {
+  console.log('In check dirty state');
+  if (component.checkDirty()) {
+    return confirm('The aspect has not been saved. Click OK to discard changes, Cancel to stay.');
+  } else {
+    return true;
+  }
+}

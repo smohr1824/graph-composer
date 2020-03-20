@@ -48,9 +48,9 @@
                              type="text"
                              placeholder="Layerset Name (required)"
                              formControlName="layersetName"
-                             [ngClass]="{'is-invalid': (layerset.controls.layersetName.touched || 
+                             [ngClass]="{'is-invalid': ((layerset.controls.layersetName.touched || 
                                                         layerset.controls.layersetName.dirty) && 
-                                                        !layerset.controls.layersetName.valid }">
+                                                        !layerset.controls.layersetName.valid) || aspectForm.errors?.duplicates }">
                       </div>
                       <div class="col-md-4">
                     <button class="btn btn-outline-primary" (click)="removeAt(i)">X</button>
@@ -65,6 +65,7 @@
                 </ul>
               </div>
             </div>
+            <div *ngIf="aspectForm.errors?.duplicates">Duplicates found among layerset names</div>
             <hr/>
             <div class="form-group row mb-2">
               <div class="col-md-2">
