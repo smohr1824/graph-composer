@@ -53,7 +53,6 @@ import { PageNotFoundComponent } from '../shared/page-not-found.component';
 export class AspectModule { }
 
 export function checkDirtyState(component: AspectEditComponent): boolean {
-  console.log('In check dirty state');
   if (component.checkDirty()) {
     return confirm('The aspect has not been saved. Click OK to discard changes, Cancel to stay.');
   } else {

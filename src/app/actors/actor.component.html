@@ -1,0 +1,38 @@
+<div class="card">
+    <div class="card-header">
+      {{title}}
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table mb-0"
+               *ngIf="actors && actors.length">
+          <tbody>
+            <tr *ngFor="let actor of actors" (click)="selectActor(actor)">
+              <td>
+                  {{ actor.name }}
+              </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm"
+                  [routerLink]="['/actors', actor.id]">
+                  Edit
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm" 
+                  (click)="deleteActor(actor.id)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+        <hr/>
+        <button class="btn btn-primary btn-sm"
+        [routerLink]="['/actors', '-1']">
+        Add Actor
+      </button>
+      </div>
+    </div>
+</div>

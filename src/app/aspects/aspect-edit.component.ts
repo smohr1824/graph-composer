@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidatorFn, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
 import { AspectService } from '../shared/aspect.service';
 import { Aspect } from '../shared/aspect';
 import { IdService } from '../shared/id.service';
@@ -127,7 +127,6 @@ export class AspectEditComponent implements OnInit {
       let names: string[] = formLayersets.map(value => value.layersetName)
       let duplicates = names.filter((item, index) => names.indexOf(item) != index)
       if (duplicates.length > 0) {
-          console.log('found duplicate');
           return {duplicates: 'duplicate entry'}
         } else {
           console.log('ok');
@@ -135,8 +134,6 @@ export class AspectEditComponent implements OnInit {
         }
 
     } else {
-      console.log('layersets not found');
-      console.log(item);
       return null;
     }
   }

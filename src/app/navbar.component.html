@@ -9,20 +9,16 @@
     <div class="collapse navbar-collapse"
          [ngClass]="{ 'show': navbarOpen }">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" [routerLink]="['/aspects']">Aspects</a>
+        <li class="nav-item ">
+          <a class="nav-link" [routerLink]="['/aspects']" routerLinkActive="active">Aspects</a>
         </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/actors']" routerLinkActive="active">
           Actors
         </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#" [routerLink]="['/actors']">List Actors</a>
-          <a class="dropdown-item" href="#">Add Actor</a>
-        </div>
       </li>
         <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/layers']">Elementary Layer</a>
+            <a class="nav-link" [routerLink]="['/layers']" routerLinkActive="active">Elementary Layer</a>
           </li>
       </ul>
     </div>

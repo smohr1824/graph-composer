@@ -9,6 +9,8 @@ import { NavbarComponent } from './navbar.component';
 import { SharedModule } from './shared/shared.module';
 import { IdService } from './shared/id.service';
 import { LayersModule } from './layers/layers.module';
+import { ActorComponent } from './actors/actor.component';
+import { ActorModule } from './actors/actor.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { LayersModule } from './layers/layers.module';
   imports: [
     BrowserModule,
     AspectModule,
+    ActorModule,
     LayersModule,
     SharedModule,
     AppRoutingModule,
