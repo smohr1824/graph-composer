@@ -6,7 +6,10 @@ import { ActorComponent } from './actor.component';
 import { ActorEditComponent } from './actoredit.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './state/actor.reducer';
+import { ActorEffects } from './state/actor.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 
 @NgModule({
@@ -38,7 +41,9 @@ import { RouterModule } from '@angular/router';
           }
         ]
       }
-    ])
+    ]),
+    StoreModule.forFeature('actors', reducer),
+    EffectsModule.forFeature([ActorEffects])
   ],
   providers: [
     { provide: 'canDeactivateEdit', useValue: checkDirtyState }

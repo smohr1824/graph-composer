@@ -30,7 +30,7 @@ export class AspectEditComponent implements OnInit, OnDestroy {
   }
 
   constructor(private route: ActivatedRoute, 
-    private store: Store<fromAspects.AspectState>,
+              private store: Store<fromAspects.AspectState>,
               private idService: IdService,
               private fb: FormBuilder,
               private router: Router) { }
@@ -115,6 +115,15 @@ export class AspectEditComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
+      if (this.aspectForm.valid) {
+        this.outAspect.name = this.aspectForm.value['aspectName'];
+        this.outAspect.id = this.aspect.id;
+        let layersets = this.aspectForm.value['layersets'];
+        this.outAspect.layerSet = [];
+        layersets.forEach(element => {
+          this.outAspect.layerSet.push(element.layersetName);
+      });
+    }
     this.router.navigate(['/aspects']);
   }
 
