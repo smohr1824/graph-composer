@@ -1,42 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
 import { AspectService } from '../shared/aspect.service';
 import { Aspect } from '../shared/aspect';
 import { IdService } from '../shared/id.service';
 
+// NgRx-related state management
+import { Store, select } from '@ngrx/store';
+import * as fromAspects from './state';
+import * as aspectActions from './state/aspect.actions';
+import { takeWhile } from 'rxjs/operators';
+
 @Component({
   selector: 'app-aspect-edit',
   templateUrl: './aspect-edit.component.html',
   styleUrls: ['./aspect-edit.component.css']
 })
-export class AspectEditComponent implements OnInit {
+export class AspectEditComponent implements OnInit, OnDestroy {
   private cardTitle: string;
   private aspect: Aspect;
+  private outAspect: Aspect = new Aspect();
   private aspectForm: FormGroup;
   private refForm: FormGroup;
+  private componentActive = true;
+  private create = false;
 
   get layersets(): FormArray {
     return this.aspectForm.get('layersets') as FormArray;
   }
 
   constructor(private route: ActivatedRoute, 
-              private aspectService: AspectService,
+    private store: Store<fromAspects.AspectState>,
               private idService: IdService,
               private fb: FormBuilder,
               private router: Router) { }
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.aspect = this.aspectService.getAspect(id);
+    //this.aspect = this.aspectService.getAspect(id);
 
-    if (id === -1 || this.aspect == null) {
+    if (id === -1 ) {
       this.cardTitle = 'Add New Aspect';
       this.aspect = new Aspect();
       this.aspect.layerSet = [];
       this.aspect.id = this.idService.nextAspectId();
+      this.create = true;
     } else {
+      this.store.pipe(select(fromAspects.getAspect, {tid: id}), takeWhile(() => this.componentActive)).subscribe(asp => this.aspect = asp);
       this.cardTitle = 'Edit Aspect';
+      this.create = false;
     }
 
     if (id === -1 || this.aspect == null) {
@@ -54,10 +66,12 @@ export class AspectEditComponent implements OnInit {
     this.refForm = Object.assign({}, this.aspectForm);
   }
 
+  ngOnDestroy() {
+    this.componentActive = false;
+  }
+
   addLayerset(): void {
     this.layersets.push(this.buildLayerset());
-    //this.layersets.push(new FormControl('', [Validators.required]))
-    //console.log(this.layersets.controls[0]);
   }
 
   buildLayersetFormItem(name: string): FormGroup {
@@ -79,19 +93,25 @@ export class AspectEditComponent implements OnInit {
   save() {
     this.aspectForm.setValidators(this.layersetValidation);
     this.aspectForm.updateValueAndValidity();
-    
+
     if (this.aspectForm.valid) {
-      this.aspect.name = this.aspectForm.value['aspectName'];
+      this.outAspect.name = this.aspectForm.value['aspectName'];
+      this.outAspect.id = this.aspect.id;
       let layersets = this.aspectForm.value['layersets'];
-      this.aspect.layerSet = [];
+      this.outAspect.layerSet = [];
       layersets.forEach(element => {
-        this.aspect.layerSet.push(element.layersetName);
+        this.outAspect.layerSet.push(element.layersetName);
       });
 
-      this.aspectService.saveAspect(this.aspect);
-
+      //this.aspectService.saveAspect(this.aspect);
+      this.componentActive = false;
+      if (this.create) {
+        this.store.dispatch(new aspectActions.CreateAspect(this.outAspect));
+      } else {
+        this.store.dispatch(new aspectActions.UpdateAspect(this.outAspect));
+      }
       this.router.navigate(['/aspects']);
-    }
+    } 
   }
 
   cancel() {
@@ -101,18 +121,19 @@ export class AspectEditComponent implements OnInit {
   public checkDirty() {
     let dirty: boolean = false;
     let formAspectName = this.aspectForm.value['aspectName'];
-    if (formAspectName  && (this.aspect.name != formAspectName)) {
+
+    if (formAspectName  && (this.outAspect.name != formAspectName)) {
       return true;
     }
 
     if (this.aspect.layerSet.length > 0 && 
-      (this.aspect.layerSet.length !== this.aspectForm.value['layersets'].length)) {
+      (this.outAspect.layerSet.length !== this.aspectForm.value['layersets'].length)) {
       return true;
     }
 
     let layersets = this.aspectForm.value['layersets'];
     layersets.forEach(element => {
-      if (!this.aspect.layerSet.includes(element.layersetName) && element.layersetName) {
+      if (!this.outAspect.layerSet.includes(element.layersetName) && element.layersetName) {
         dirty = true;
       }
     });
@@ -129,7 +150,6 @@ export class AspectEditComponent implements OnInit {
       if (duplicates.length > 0) {
           return {duplicates: 'duplicate entry'}
         } else {
-          console.log('ok');
           return null;
         }
 

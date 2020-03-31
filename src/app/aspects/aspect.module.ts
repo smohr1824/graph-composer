@@ -10,6 +10,10 @@ import { LayersetListComponent } from './layerset-list.component';
 import { AspectEditComponent } from './aspect-edit.component';
 import { SharedModule } from '../shared/shared.module';
 import { PageNotFoundComponent } from '../shared/page-not-found.component';
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './state/aspect.reducer';
+import { AspectEffects } from './state/aspect.effects';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,9 @@ import { PageNotFoundComponent } from '../shared/page-not-found.component';
           }
         ]
       }
-    ])
+    ]),
+    StoreModule.forFeature('aspects', reducer),
+    EffectsModule.forFeature([AspectEffects])
   ], 
   providers: [
     AspectService,
