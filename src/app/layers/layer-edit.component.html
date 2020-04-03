@@ -1,1 +1,79 @@
-<p>layer-edit works!</p>
+<nav class="navbar navbar-light bg-light" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group mr-auto" role="group" aria-label="First group">
+      <button type="button" class="btn btn-secondary" (click)="setMode('concept')">+Concept</button>
+      <button type="button" class="btn btn-secondary" (click)="setMode('influence')">+Influence</button>
+      <button type="button" class="btn btn-secondary" (click)="setMode('delete')">Delete</button>
+    </div>
+    <form [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+        <div class="form-group">
+            <label class="control-label col-sm-offset-2 col-sm-4" for="system">System</label>
+            <div class="col-sm-6 col-md-4">
+              <select  formControlName="system" id="system" name="system" class="form-control">
+                <option>electrical</option>
+                <option>flow</option>
+                <option>control</option>
+              </select> 
+            </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-offset-2 col-sm-4" for="location">Location</label>
+          <div class="col-sm-6 col-md-4">
+            <select formControlName="location" id="location" name="location" class="form-control">
+              <option>PHL</option>
+              <option>JC</option>
+              <option>PHX</option>
+            </select> 
+          </div>
+        </div>
+    </form>
+    <div class="btn-group mr-auto" role="group" aria-label="Third group">
+      <button type="button" class="btn btn-secondary" (click)='writeVector()'>Upload</button>
+    </div>
+</nav>
+<hr/>
+<div class="row" >
+  <div class="col-md-6" >
+    <div class="card" id="actorcard">
+      <div class="card-header">
+        Actors
+      </div>
+      <div class="card-body">
+        <form [formGroup]="actorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+          <div class="form-group">
+            <label class="control-label col-sm-offset-2 col-sm-4" for="system">Actors</label>
+            <div class="col-sm-6 col-md-4">
+              <select  formControlName="actors" id="actors" name="actors" class="form-control">
+                <option *ngFor="let actor of actors">{{actor.name}}</option>
+              </select> 
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card" *ngIf="mode==='influence'" id="targetcard">
+      <div class="card-header">
+        Targets
+      </div>
+      <div class="card-body">
+        <form [formGroup]="targetForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+          <div class="form-group">
+            <label class="control-label col-sm-offset-2 col-sm-4" for="system">Actors</label>
+            <div class="col-sm-6 col-md-4">
+              <select  formControlName="targets" id="targets" name="targets" class="form-control">
+                <option *ngFor="let actor of actors">{{actor.name}}</option>
+              </select> 
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">  
+  <div ><canvas #canvas></canvas></div>
+</div>  
+
+

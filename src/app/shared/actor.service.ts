@@ -20,7 +20,6 @@ export class ActorService {
     const index = ACTORS.findIndex((act:Actor) => act.id === actor.id);
     if (index === -1) {
       ACTORS = [...ACTORS, actor];   
-      console.log(ACTORS);
     } else {
       ACTORS = [...ACTORS.slice(0, index), actor, ...ACTORS.slice(index + 1)];
     }

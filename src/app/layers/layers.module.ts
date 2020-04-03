@@ -4,6 +4,7 @@ import { RouterModule, CanActivate } from '@angular/router';
 import { LayersComponent } from './layers.component';
 import { LayerEditComponent } from './layer-edit.component';
 import { GraphGuard } from '../graph.guard'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,6 +14,8 @@ import { GraphGuard } from '../graph.guard'
           ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild([
       {
         path: 'layers',
