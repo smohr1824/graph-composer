@@ -8,7 +8,7 @@ import { IdService } from '../shared/id.service';
 import { Store, select } from '@ngrx/store';
 import * as fromAspects from '../aspects/state';
 import * as fromActors from '../actors/state';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import * as data from './layerElements';
 import { Concept } from '../shared/concept';
 
@@ -51,7 +51,9 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.actorForm = this.fb.group({
-      actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : '')
+      actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
+      initialLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]],
+        activationLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]]
     })
 
     this.targetForm = this.fb.group({
@@ -125,7 +127,6 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   addNode(name: string, x: number, y: number) {
     let node = new data.Node();
     node.concept = new Concept();
-    // TODO: figure out how to specify initial and activation levels
     let actorMatch = this.actors.filter(item => item.name === name);
     if (actorMatch.length > 0) {
       let actor = actorMatch[0];

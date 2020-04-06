@@ -33,9 +33,8 @@ export class ActorEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
     this.componentActive = true;
-    console.log('in actor edit with id ' + id);
+
     if (id === -1) {
-      console.log('creating an actor');
       this.cardTitle = 'Add New Actor';
       this.actor = new Actor();
       this.actor.name = '';
@@ -51,23 +50,14 @@ export class ActorEditComponent implements OnInit, OnDestroy {
       this.create = false;
     }
 
-    //this.actorForm = this.fb.group({
-    //  name: [this.actor.name, [Validators.required]],
-    //  initialLevel: [this.actor.initialLevel, [Validators.required, Validators.min(0), Validators.max(1)]],
-    //  activationLevel: [this.actor.activationLevel, [Validators.required, Validators.min(0), Validators.max(1)]]
-    //});
 
     if (id === -1 || this.actor == null) {
       this.actorForm = this.fb.group({
-        name: ['', [Validators.required]],
-        initialLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]],
-        activationLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]]
+        name: ['', [Validators.required]]
       });
     } else {
       this.actorForm = this.fb.group({
-        name: [this.actor.name, [Validators.required]],
-        initialLevel: [this.actor.initialLevel, [Validators.required, Validators.min(0), Validators.max(1)]],
-        activationLevel: [this.actor.activationLevel, [Validators.required, Validators.min(0), Validators.max(1)]]
+        name: [this.actor.name, [Validators.required]]
       })
     }
   }
@@ -80,8 +70,8 @@ export class ActorEditComponent implements OnInit, OnDestroy {
     if (this.actorForm.valid){
       this.outActor.id = this.actor.id;
       this.outActor.name = this.actorForm.value['name'];
-      this.outActor.initialLevel = this.actorForm.value['initialLevel'];
-      this.outActor.activationLevel = this.actorForm.value['activationLevel'];
+      //this.outActor.initialLevel = this.actorForm.value['initialLevel'];
+      //this.outActor.activationLevel = this.actorForm.value['activationLevel'];
 
       this.componentActive = false;
       if (this.create) {
@@ -109,13 +99,13 @@ export class ActorEditComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    if (this.outActor.initialLevel != +this.actorForm.value['initialLevel']) {
-      return true;
-    }
+    //if (this.outActor.initialLevel != +this.actorForm.value['initialLevel']) {
+    //  return true;
+    //}
 
-    if (this.outActor.activationLevel != + this.actorForm.value['activationLevel']) {
-      return true;
-    }
+    //if (this.outActor.activationLevel != + this.actorForm.value['activationLevel']) {
+    //  return true;
+    //}
   }
 
 }
