@@ -42,22 +42,21 @@
           <div class="form-group">
             <div class="row ">
               <div class="col">
-              <label class="control-label" for="system">Actors</label>
+                <label class="control-label" for="system">Actors</label>
                 <select  formControlName="actors" id="actors" name="actors" class="form-control">
                   <option *ngFor="let actor of actors">{{actor.name}}</option>
                 </select> 
               </div>
               <div class="col">
                 <label class="control-label" for="initialLevel">Initial Level</label>
-                <input class="form-control " id="initialLevel" name="initialLevel"
+                <input class="form-control " min="-1" max="1" id="initialLevel" name="initialLevel"
                   type="number" value="0"/>
               </div>
             </div>
             <div class="row">
-              <div class="col"></div>
               <div class="col">
                 <label class="control-label " for="activationLevel">Activation Level</label>
-                <input class="form-control " id="activationLevel" name="activationLevel"
+                <input class="form-control " min="-1" max="1" id="activationLevel" name="activationLevel"
                   type="number" value="0"/>
               </div>  
             </div>
@@ -72,13 +71,20 @@
         Targets
       </div>
       <div class="card-body">
-        <form [formGroup]="targetForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+        <form [formGroup]="targetForm"  role="group" aria-label="Aspect group">
           <div class="form-group">
-            <label class="control-label col-sm-offset-2 col-sm-4" for="system">Actors</label>
-            <div class="col-sm-6 col-md-4">
-              <select  formControlName="targets" id="targets" name="targets" class="form-control">
-                <option *ngFor="let actor of actors">{{actor.name}}</option>
-              </select> 
+            <div class="row">
+              <div class="col">
+                <label class="control-label" for="targets">Actors</label>
+                <select  formControlName="targets" id="targets" name="targets" class="form-control">
+                    <option *ngFor="let actor of actors">{{actor.name}}</option>
+                </select>
+              </div>
+              <div class="col">
+                <label class="control-label" for="weight">Weight</label>
+                <input formControlName="weight" class="form-control " min="-1" max="1" id="weight" name="weight"
+                  type="number" value="0"/>
+              </div>
             </div>
           </div>
         </form>
@@ -87,8 +93,10 @@
   </div>
 </div>
 
-<div class="col-md-12">  
-  <div ><canvas #canvas></canvas></div>
-</div>  
+
+<div class="margin:0; padding:0">
+  <canvas #canvas></canvas>
+</div>
+
 
 

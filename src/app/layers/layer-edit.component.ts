@@ -11,6 +11,10 @@ import * as fromActors from '../actors/state';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import * as data from './layerElements';
 import { Concept } from '../shared/concept';
+import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
+
+const RADIUS = 15;
+const HEADSIZE = 10;
 
 @Component({
   selector: 'app-layer-edit',
@@ -57,7 +61,8 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     })
 
     this.targetForm = this.fb.group({
-      targets: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : '')
+      targets: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
+      weight: [0, [Validators.required, Validators.min(-1), Validators.max(1)]]
     })
   }
 
@@ -87,6 +92,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cx.lineWidth = 1;
         this.cx.lineCap = 'round';
         this.cx.strokeStyle = '#000000';
+        this.cx.fillStyle = '#000000';
 
         fromEvent(this.canvasEl, 'click').subscribe((evt:MouseEvent)=>this.clickCanvas(this,evt), takeWhile(_=>this.componentActive));
         this.canvasRect = this.canvasEl.getBoundingClientRect();
@@ -110,13 +116,17 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.drawNode(this, x, y, selectedActor);
         this.addNode(selectedActor, x, y);
         break;
+
+      case 'influence':
+        this.drawEdge(this, selectedActor, selectedTarget);
+        this.addEdge(this, selectedActor, selectedTarget);
     }
          
   }
 
   drawNode(comp: LayerEditComponent, x: number, y: number, label: string) {
     comp.cx.beginPath();
-    comp.cx.arc(x, y, 15, 0, 2*Math.PI, false);
+    comp.cx.arc(x, y, RADIUS, 0, 2*Math.PI, false);
     comp.cx.stroke();
     comp.cx.font = '12px Arial';
     comp.cx.textAlign = 'center';
@@ -139,6 +149,78 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     node.x = x;
     node.y = y;
     this.nodes.push(node);
+  }
+
+  drawEdge(comp: LayerEditComponent, src: string, tgt: string) {
+
+    // TODO: offset when a reciprocal edge exists
+    let srcActors = this.nodes.filter(actor => actor.concept.name === src);
+    let tgtActors = this.nodes.filter(actor => actor.concept.name === tgt);
+    if (srcActors.length > 0 && tgtActors.length > 0) {
+      let srcActor = srcActors[0];
+      let tgtActor = tgtActors[0];
+      let theta = Math.atan2(tgtActor.y - srcActor.y, tgtActor.x - srcActor.x);
+      let startX = srcActor.x + RADIUS * Math.cos(theta);
+      let startY = srcActor.y + RADIUS * Math.sin(theta);
+      let endX = tgtActor.x - RADIUS * Math.cos(theta);
+      let endY = tgtActor.y - RADIUS * Math.sin(theta);
+      let wt:number = +comp.targetForm.value['weight'];
+      // negatives weights are in red
+      if (wt < 0) {
+        comp.cx.strokeStyle = '#8B0000';
+        comp.cx.fillStyle = '#8B0000';
+      }
+      comp.cx.beginPath();
+      comp.cx.moveTo(startX, startY);
+      comp.cx.lineTo(endX, endY);
+      
+      let labelX = startX + (endX - startX)/2;
+      let labelY = startY + (endY - startY)/2;
+      comp.cx.font = '12px Arial';
+      comp.cx.textAlign = 'center';
+      comp.cx.textBaseline = 'middle';
+      comp.cx.fillText(wt.toFixed(2), labelX, labelY);
+
+      comp.cx.stroke();
+
+      // now do the arrow head
+      comp.cx.beginPath();
+      comp.cx.moveTo(endX, endY);
+      comp.cx.lineTo(endX-HEADSIZE*Math.cos(theta-Math.PI/7), endY-HEADSIZE*Math.sin(theta-Math.PI/7));
+      console.log(theta);
+      // from one side of the head to the other
+      comp.cx.lineTo(endX-HEADSIZE*Math.cos(theta+Math.PI/7), endY-HEADSIZE*Math.sin(theta+Math.PI/7));
+      console.log(theta)
+      // side to tip, then back to the starting side
+      comp.cx.lineTo(endX, endY);
+      comp.cx.lineTo(endX-HEADSIZE*Math.cos(theta-Math.PI/7), endY-HEADSIZE*Math.sin(theta-Math.PI/7));
+      console.log(theta);
+      comp.cx.stroke();
+      comp.cx.fill();
+
+      comp.cx.strokeStyle = '#000000';
+      comp.cx.fillStyle = '#000000';
+    }
+  }
+
+  addEdge(comp: LayerEditComponent, src: string, tgt: string) {
+    let edge = new data.Edge();
+    edge.source = src;
+    edge.target = tgt;
+
+    let srcActors = this.nodes.filter(actor => actor.concept.name === src);
+    let tgtActors = this.nodes.filter(actor => actor.concept.name === tgt);
+    if (srcActors.length > 0 && tgtActors.length > 0) {
+      let srcActor = srcActors[0];
+      let tgtActor = tgtActors[0];
+
+      edge.srcX = srcActor.x;
+      edge.srcY = srcActor.y;
+      edge.tgtX = tgtActor.x;
+      edge.tgtY = tgtActor.y;
+      edge.weight = +comp.targetForm.value['weight'];
+      this.edges.push(edge);
+    }
   }
 
   mouseToRelativeX(comp: LayerEditComponent, mouseX: number): number {
