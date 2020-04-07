@@ -154,16 +154,35 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   drawEdge(comp: LayerEditComponent, src: string, tgt: string) {
 
     // TODO: offset when a reciprocal edge exists
+    let reciprocalEdge = this.edges.find(edge => edge.source === tgt && edge.target === src);
+
     let srcActors = this.nodes.filter(actor => actor.concept.name === src);
     let tgtActors = this.nodes.filter(actor => actor.concept.name === tgt);
     if (srcActors.length > 0 && tgtActors.length > 0) {
       let srcActor = srcActors[0];
       let tgtActor = tgtActors[0];
       let theta = Math.atan2(tgtActor.y - srcActor.y, tgtActor.x - srcActor.x);
-      let startX = srcActor.x + RADIUS * Math.cos(theta);
-      let startY = srcActor.y + RADIUS * Math.sin(theta);
-      let endX = tgtActor.x - RADIUS * Math.cos(theta);
-      let endY = tgtActor.y - RADIUS * Math.sin(theta);
+
+      let startX:number;
+      let startY: number;
+      let endX: number;
+      let endY: number;
+      if (reciprocalEdge == null) {
+        startX = srcActor.x + RADIUS * Math.cos(theta);
+        startY = srcActor.y + RADIUS * Math.sin(theta);
+        endX = tgtActor.x - RADIUS * Math.cos(theta);
+        endY = tgtActor.y - RADIUS * Math.sin(theta);
+      } else {
+        // there is an existing reciprocal edge, so offset the new one
+        // TODO: if we end up doing a mass redraw, offset both
+        let thetaPrimeSrc = theta + 25 * Math.PI/180;
+        let thetaPrimeTgt = theta - 25 * Math.PI/180;
+
+        startX = srcActor.x + RADIUS * Math.cos(thetaPrimeSrc);
+        startY = srcActor.y + RADIUS * Math.sin(thetaPrimeSrc);
+        endX = tgtActor.x - RADIUS * Math.cos(thetaPrimeTgt);
+        endY = tgtActor.y - RADIUS * Math.sin(thetaPrimeTgt);
+      }
       let wt:number = +comp.targetForm.value['weight'];
       // negatives weights are in red
       if (wt < 0) {
