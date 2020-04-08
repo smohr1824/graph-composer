@@ -6,13 +6,16 @@ import { Concept } from '../shared/concept';
 export class Edge {
     // unique to the elementary layer during the lifetime of the edit session (not persisted)
     id: number; 
-    source: string;
-    target: string;
+    source: number;
+    target: number;
     weight: number;
-    srcX: number;
-    srcY: number;
-    tgtX: number;
-    tgtY: number;
+    labelX: number;
+    labelY: number;
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+    theta: number;
 }
 
 export class Node {

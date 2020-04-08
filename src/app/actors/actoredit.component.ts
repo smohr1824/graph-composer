@@ -44,8 +44,6 @@ export class ActorEditComponent implements OnInit, OnDestroy {
       this.create = true;
     } else {
       this.store.pipe(select(fromActors.getActor, {tid: id}), takeWhile(() => this.componentActive)).subscribe(act => this.actor = act);
-      console.log('editing an actor');
-      console.log(this.actor);
       this.cardTitle = 'Edit Actor';
       this.create = false;
     }

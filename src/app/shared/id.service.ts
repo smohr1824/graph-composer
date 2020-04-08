@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class IdService {
   private aspectNextId: number = 2;
   private actorNextId: number = 0;
+  private edgeNextId: number = 0;
 
   constructor() { }
 
@@ -15,5 +16,9 @@ export class IdService {
 
   nextActorId(): number {
     return this.actorNextId++;
+  }
+
+  nextEdgeId(): number {
+    return this.edgeNextId++;
   }
 }
