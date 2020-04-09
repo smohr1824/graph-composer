@@ -13,6 +13,7 @@ import * as data from './layerElements';
 import { Concept } from '../shared/concept';
 import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
 import { reportInvalidActions } from '@ngrx/effects/src/effect_notification';
+import { stringify } from 'querystring';
 
 const RADIUS = 15;
 const HEADSIZE = 10;
@@ -38,6 +39,8 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private edges: data.Edge[];
   private mode: string = 'concept';
   private canvasRect: ClientRect;
+  // The next property is temporary -- dev only
+  private GML: string;
 
   constructor(private aspectState: Store<fromAspects.AspectState>, 
     private actorState: Store<fromActors.ActorState>, 
@@ -50,15 +53,17 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     // get the aspects and actors
     this.aspectState.pipe(select(fromAspects.getAspects), takeWhile(()=>this.componentActive)).subscribe(aspects => this.aspects = aspects);
     this.aspectState.pipe(select(fromActors.getActors), takeWhile(()=>this.componentActive)).subscribe(actors => this.actors = actors);
-    this.vectorForm = this.fb.group({
-      system: new FormControl('flow'),
-      location: new FormControl('PHL'),
+    let controls = {};
+
+    this.aspects.forEach(aspect => { 
+      controls[aspect.name]= new FormControl(aspect.layerSet[0]);
     });
+     
+    this.vectorForm = this.fb.group(controls);
 
     this.actorForm = this.fb.group({
       actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
       initialLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]]//,
-        //activationLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]]
     })
 
     this.targetForm = this.fb.group({
@@ -98,6 +103,32 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setMode(mode:string) {
     this.mode = mode;
+  }
+
+  writeLayer() {
+    // for now, write out a layer GML fragment. Ultimately, we'll POST it to th backend service
+
+    this.GML = 'layer [\r\n';
+    this.GML += '\tcoordinates\t';
+    let keys = Object.keys(this.vectorForm.controls);
+    let coords:string[] = [];
+    keys.forEach(key => { 
+      coords.push(this.vectorForm.controls[key].value);
+    });
+    this.GML += coords.join(',') + '\r\n';
+    this.GML += '\tgraph [\r\n';
+    this.GML += '\t\tdirected 1\r\n';
+    this.nodes.forEach(node => { 
+      this.GML += '\t\tnode [\r\n\t\t\tid ' + node.id + '\r\n\t\t]\r\n';
+      
+    });
+    this.edges.forEach(edge => {
+      this.GML += '\t\tedge [\r\n\t\t\tsource ' + edge.source + '\r\n';
+      this.GML += '\t\t\ttarget ' + edge.target + '\r\n';
+      this.GML += '\t\t\tweight ' + edge.weight.toFixed(5).toString() + '\r\n\t\t]\r\n';
+    })
+    this.GML += '\t]\r\n]';
+
   }
 
   clickCanvas(comp: LayerEditComponent, evt: MouseEvent){
