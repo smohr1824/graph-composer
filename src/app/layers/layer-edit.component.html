@@ -6,33 +6,13 @@
     </div>
     <form [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
         <div *ngFor="let aspect of aspects" class="form-group">
-          <label class="control-label col-sm-offset-2 col-sm-4" for={{aspect.name}}>{{aspect.name}}</label>
-          <div class="col-sm-6 col-md-4">
+          <label class="control-label col-sm-offset-2" for={{aspect.name}}>{{aspect.name}}</label>
+          <div class="col-sm-6 ">
             <select formControlName={{aspect.name}} id={{aspect.name}} name={{aspect.name}} class="form-control">
               <option *ngFor="let layer of aspect.layerSet">{{layer}}</option>
             </select>
           </div>
         </div>
-        <!--<div class="form-group">
-            <label class="control-label col-sm-offset-2 col-sm-4" for="system">System</label>
-            <div class="col-sm-6 col-md-4">
-              <select  formControlName="system" id="system" name="system" class="form-control">
-                <option>electrical</option>
-                <option>flow</option>
-                <option>control</option>
-              </select> 
-            </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-sm-offset-2 col-sm-4" for="location">Location</label>
-          <div class="col-sm-6 col-md-4">
-            <select formControlName="location" id="location" name="location" class="form-control">
-              <option>PHL</option>
-              <option>JC</option>
-              <option>PHX</option>
-            </select> 
-          </div>
-        </div>-->
     </form>
     <div class="btn-group mr-auto" role="group" aria-label="Third group">
       <button type="button" class="btn btn-secondary" (click)='writeLayer()'>Upload</button>
