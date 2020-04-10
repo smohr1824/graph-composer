@@ -51,11 +51,13 @@ export class ActorEditComponent implements OnInit, OnDestroy {
 
     if (id === -1 || this.actor == null) {
       this.actorForm = this.fb.group({
-        name: ['', [Validators.required]]
+        name: ['', [Validators.required]],
+        initialLevel: [0, [Validators.required, Validators.max(1), Validators.min(-1)]]
       });
     } else {
       this.actorForm = this.fb.group({
-        name: [this.actor.name, [Validators.required]]
+        name: [this.actor.name, [Validators.required]],
+        initialLevel: [this.actor.initialLevel, [Validators.required, Validators.max(1), Validators.min(-1)]]
       })
     }
   }
@@ -68,7 +70,7 @@ export class ActorEditComponent implements OnInit, OnDestroy {
     if (this.actorForm.valid){
       this.outActor.id = this.actor.id;
       this.outActor.name = this.actorForm.value['name'];
-      //this.outActor.initialLevel = this.actorForm.value['initialLevel'];
+      this.outActor.initialLevel = +this.actorForm.value['initialLevel'];
       //this.outActor.activationLevel = this.actorForm.value['activationLevel'];
 
       this.componentActive = false;
@@ -85,9 +87,11 @@ export class ActorEditComponent implements OnInit, OnDestroy {
   cancel() {
     if (this.actorForm.valid) {
       this.outActor.id = this.actor.id;
-      this.outActor.name = this.actorForm.value['name'];
-      this.outActor.initialLevel = this.actorForm.value['initialLevel'];
-      this.outActor.activationLevel = this.actorForm.value['activationLevel'];
+      //this.outActor.name = this.actorForm.value['name'];
+      //this.outActor.initialLevel = this.actorForm.value['initialLevel'];
+      this.outActor.name = this.actor.name;
+      this.outActor.initialLevel = this.actor.initialLevel;
+      //this.outActor.activationLevel = this.actorForm.value['activationLevel'];
     }
     this.router.navigate(['/actors']);
   }
@@ -97,9 +101,9 @@ export class ActorEditComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    //if (this.outActor.initialLevel != +this.actorForm.value['initialLevel']) {
-    //  return true;
-    //}
+    if (this.outActor.initialLevel != +this.actorForm.value['initialLevel']) {
+      return true;
+    }
 
     //if (this.outActor.activationLevel != + this.actorForm.value['activationLevel']) {
     //  return true;

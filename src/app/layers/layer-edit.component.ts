@@ -62,9 +62,9 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.vectorForm = this.fb.group(controls);
 
     this.actorForm = this.fb.group({
-      actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
-      initialLevel: [0, [Validators.required, Validators.min(0), Validators.max(1)]]//,
-    })
+      actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : '')//,
+      //initialLevel: [(this.actors && this.actors.length > 0)?this.actors[0].initialLevel : 0, [Validators.required, Validators.min(0), Validators.max(1)]]//,
+    });
 
     this.targetForm = this.fb.group({
       targets: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
@@ -142,7 +142,12 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     switch (this.mode) {
       case 'concept':
-        let initial = +comp.actorForm.value['initialLevel'];
+        let actor = this.actors.find(act => act.name === selectedActor);
+        let initial = 0;
+        if (actor) {
+          initial = actor.initialLevel;
+        }
+        //let initial = +comp.actorForm.value['initialLevel'];
         let nodeId = this.addNode(selectedActor, x, y, initial);
         if (nodeId > -1) {
           this.drawNode(this, x, y, selectedActor, initial);
