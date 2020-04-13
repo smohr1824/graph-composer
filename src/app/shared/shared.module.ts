@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {  IdService } from './id.service';
 import { WelcomeComponent } from './welcome.component'
 import { AspectService } from './aspect.service';
+import { LayerService } from './layer.service';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { AspectService } from './aspect.service';
   ],
   providers: [
     IdService,
-    AspectService
+    AspectService,
+    LayerService
   ]
 })
 export class SharedModule { }

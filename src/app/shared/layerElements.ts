@@ -1,4 +1,4 @@
-import { Concept } from '../shared/concept';
+import { Concept } from './concept';
 
 // this is local to the module as it will be used only to maintain edge
 // objects in the editor canvas

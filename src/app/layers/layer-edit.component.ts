@@ -9,7 +9,7 @@ import { Store, select } from '@ngrx/store';
 import * as fromAspects from '../aspects/state';
 import * as fromActors from '../actors/state';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import * as data from './layerElements';
+import * as data from '../shared/layerElements';
 import { Concept } from '../shared/concept';
 import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
 import { reportInvalidActions } from '@ngrx/effects/src/effect_notification';

@@ -33,7 +33,9 @@ export class AspectService {
     if (index != -1) {
       ASPECTS = ASPECTS.filter((item, _) => item.id != id);
       return of(id);
-    } 
+    } else {
+      return of(-1);
+    }
   }
 
   updateAspect(aspect: Aspect): Observable<Aspect> {
