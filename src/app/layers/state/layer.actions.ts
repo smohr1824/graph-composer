@@ -63,6 +63,18 @@ export class GetLayer implements Action {
     constructor(public payload: string) { };
 }
 
+export class GetLayerSuccess implements Action {
+    readonly type = LayerActionTypes.GetLayerSuccess;
+
+    constructor(public payload: ElementaryLayer) { };
+}
+
+export class GetLayerFailure implements Action {
+    readonly type = LayerActionTypes.GetLayerFailure;
+
+    constructor(public payload: string) { }
+}
+
 export class CreateLayer implements Action {
     readonly type = LayerActionTypes.CreateLayer;
 
@@ -129,4 +141,7 @@ export type LayerActions = LoadLayers
     | DeleteLayerFailure
     | UpdateLayer
     | UpdateLayerSuccess
-    | UpdateLayerFailure;
+    | UpdateLayerFailure
+    | GetLayer
+    | GetLayerSuccess
+    | GetLayerFailure;

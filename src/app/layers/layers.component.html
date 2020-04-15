@@ -1,3 +1,39 @@
-<div >
-<app-layer-edit></app-layer-edit>
+<div class="card">
+    <div class="card-header">
+      {{title}}
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table mb-0"
+               *ngIf="layers && layers.length">
+          <tbody>
+            <tr *ngFor="let layer of layers" (click)="selectLayer(layer)">
+              <td>
+                  {{ layer.coordinates }}
+              </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm"
+                (click)="editLayer(layer.coordinates)"
+                  [routerLink]="['/layers', '['+layer.coordinates + ']']">
+                  Edit
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm" 
+                  (click)="deleteLayer(layer.coordinates)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+        <hr/>
+        <button class="btn btn-primary btn-sm"
+        [routerLink]="['/layers', '-1']">
+        Add Elementary Layer
+      </button>
+      </div>
+    </div>
 </div>

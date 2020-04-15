@@ -5,6 +5,10 @@ import { LayersComponent } from './layers.component';
 import { LayerEditComponent } from './layer-edit.component';
 import { GraphGuard } from '../graph.guard'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { reducers } from '../state/app.state';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { LayerEffects } from './state/layer.effects';
 
 
 @NgModule({
@@ -35,7 +39,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
           }
         ]
       }
-    ])
+    ]),
+    //StoreModule.forFeature('layers', reducers),
+    EffectsModule.forFeature([LayerEffects])
   ]
 })
 export class LayersModule { }

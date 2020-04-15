@@ -4,7 +4,8 @@
       <button type="button" class="btn btn-secondary" (click)="setMode('influence')">+Influence</button>
       <button type="button" class="btn btn-secondary" (click)="setMode('delete')">Delete</button>
     </div>
-    <form [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+    
+    <form  *ngIf="create" [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
         <div *ngFor="let aspect of aspects" class="form-group">
           <label class="control-label col-sm-offset-2" for={{aspect.name}}>{{aspect.name}}</label>
           <div class="col-sm-6 ">
@@ -14,6 +15,11 @@
           </div>
         </div>
     </form>
+    <!--<form *ngIf="!create" [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+      <textarea *ngFor="let aspect of aspects;let idx=index" class="form-group">
+        {{aspect.name}}: {{coords[idx]}}
+      </div>
+    </form> -->
     <div class="btn-group mr-auto" role="group" aria-label="Third group">
       <button type="button" class="btn btn-secondary" (click)='writeLayer()'>Upload</button>
     </div>
@@ -35,19 +41,7 @@
                   <option *ngFor="let actor of actors">{{actor.name}}</option>
                 </select> 
               </div>
-              <!--<div class="col">
-                <label class="control-label" for="initialLevel">Initial Level</label>
-                <input class="form-control " min="-1" max="1" id="initialLevel" name="initialLevel" 
-                  formControlName="initialLevel" type="number" value="0"/>
-              </div>-->
             </div>
-            <!--<div class="row">
-              <div class="col">
-                <label class="control-label " for="activationLevel">Activation Level</label>
-                <input class="form-control " min="-1" max="1" id="activationLevel" name="activationLevel"
-                  type="number" value="0"/>
-              </div>  
-            </div>-->
           </div>
         </form>
       </div>

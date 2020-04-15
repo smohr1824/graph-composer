@@ -21,14 +21,13 @@ export class LayerService {
     return of(LAYERS.find(x => x.coordinates === coord));
   }
 
-  createLayer(layer: ElementaryLayer): Observable<string> {
+  createLayer(layer: ElementaryLayer): Observable<ElementaryLayer> {
     const index = LAYERS.findIndex((lay:ElementaryLayer) => lay.coordinates === layer.coordinates);
     if (index === -1) {
       LAYERS = [...LAYERS, layer];  
-      return of(layer.coordinates);    
-    } else {
-      return of('layer already exists in store');
-    }
+      console.log(LAYERS);
+    } 
+    return of(layer);
   }
 
   updateLayer(layer: ElementaryLayer): Observable<ElementaryLayer> {

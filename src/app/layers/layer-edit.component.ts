@@ -5,15 +5,19 @@ import { map, takeWhile } from 'rxjs/operators';
 import { Aspect } from '../shared/aspect';
 import { Actor } from '../shared/actor';
 import { IdService } from '../shared/id.service';
-import { Store, select } from '@ngrx/store';
 import * as fromAspects from '../aspects/state';
 import * as fromActors from '../actors/state';
+import * as fromLayers from './state';
+import * as layerActions from './state/layer.actions';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import * as data from '../shared/layerElements';
 import { Concept } from '../shared/concept';
-import { ɵINTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS } from '@angular/platform-browser-dynamic';
-import { reportInvalidActions } from '@ngrx/effects/src/effect_notification';
-import { stringify } from 'querystring';
+
+// NgRx-related state management
+import { Store, select } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
+import { ElementaryLayer } from '../shared/elementary-layer';
+import { LayerActionTypes } from './state/layer.actions';
 
 const RADIUS = 15;
 const HEADSIZE = 10;
@@ -33,34 +37,57 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private actorForm: FormGroup;
   private targetForm: FormGroup;
   private componentActive = true;
-  private aspects: Aspect[];
+  aspects: Aspect[];
   private actors: Actor[];
   private nodes: data.Node[];
   private edges: data.Edge[];
   private mode: string = 'concept';
   private canvasRect: ClientRect;
+  private create: boolean;
+  private coords: string[];
   // The next property is temporary -- dev only
   private GML: string;
+  layer: ElementaryLayer;
 
-  constructor(private aspectState: Store<fromAspects.AspectState>, 
+  constructor(private route: ActivatedRoute,
+    private aspectState: Store<fromAspects.AspectState>, 
     private actorState: Store<fromActors.ActorState>, 
+    private store: Store<fromLayers.ElementaryLayerState>,
     private fb: FormBuilder,
     private idSvc: IdService ) { }
 
   ngOnInit() {
     this.nodes = [];
     this.edges = [];
+    const id = this.route.snapshot.paramMap.get('id');
     // get the aspects and actors
     this.aspectState.pipe(select(fromAspects.getAspects), takeWhile(()=>this.componentActive)).subscribe(aspects => this.aspects = aspects);
-    this.aspectState.pipe(select(fromActors.getActors), takeWhile(()=>this.componentActive)).subscribe(actors => this.actors = actors);
+    this.actorState.pipe(select(fromActors.getActors), takeWhile(()=>this.componentActive)).subscribe(actors => this.actors = actors);
+
+    if (id === '-1' ) {
+      this.create = true;
+    } else {
+      let idX = id.replace("[", "");
+      idX = idX.replace("]", "");
+
+      this.store.pipe(select(fromLayers.getElementaryLayer, {coords: idX}), 
+        takeWhile(() => this.componentActive)).subscribe(lay => {
+          this.layer = lay;
+          this.onReceiptOfLayer(this);
+      });
+
+      this.create = false;
+    }
+
     let controls = {};
 
-    this.aspects.forEach(aspect => { 
-      controls[aspect.name]= new FormControl(aspect.layerSet[0]);
-    });
+    if (this.create) {
+      this.aspects.forEach((aspect, index) => { 
+          controls[aspect.name]= new FormControl(aspect.layerSet[0]);
+      });
+      this.vectorForm = this.fb.group(controls);
+    }
      
-    this.vectorForm = this.fb.group(controls);
-
     this.actorForm = this.fb.group({
       actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : '')//,
       //initialLevel: [(this.actors && this.actors.length > 0)?this.actors[0].initialLevel : 0, [Validators.required, Validators.min(0), Validators.max(1)]]//,
@@ -69,7 +96,12 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.targetForm = this.fb.group({
       targets: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
       weight: [0, [Validators.required, Validators.min(-1), Validators.max(1)]]
-    })
+    });
+
+    this.aspects.forEach((aspect, index) => { 
+      controls[aspect.name]= new FormControl(aspect[0]);
+    });
+    this.vectorForm = this.fb.group(controls);
   }
 
   ngOnDestroy() {
@@ -98,8 +130,51 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         fromEvent(this.canvasEl, 'click').subscribe((evt:MouseEvent)=>this.clickCanvas(this,evt), takeWhile(_=>this.componentActive));
         this.canvasRect = this.canvasEl.getBoundingClientRect();
+
+        if (!this.create) {
+          this.redraw();
+        }
   }
 
+  onReceiptOfLayer(comp: LayerEditComponent) {
+
+    // set the data
+    comp.nodes = comp.layer.nodes;
+    comp.edges = comp.layer.edges;
+    comp.coords = comp.breakCoordinates(comp.layer.coordinates)
+
+    // update the aspect form control values
+
+    // let controls: FormControl[] = [];
+    // this.aspects.forEach((aspect, index) => { 
+    //   controls[aspect.name] = new FormControl('');
+    //   //controls[aspect.name].patchValue(comp.coords[index]);
+    // });
+    // console.log(controls);
+    // comp.vectorForm = comp.fb.group(controls);
+    // Object.keys(comp.vectorForm.controls).forEach((name, index) => {
+    //   if (comp.vectorForm[name]) {
+    //     comp.vectorForm.patchValue(comp.coords[index], {onlySelf: true, emitEvent: true});
+    //   }
+    // });
+    // comp.vectorForm.patchValue({Location:'JC'});
+
+    
+    // let obj = {};
+    // comp.aspects.forEach((aspect, index) => {
+    //   obj[aspect.name] = comp.coords[index];
+    //   console.log(comp.vectorForm.get(aspect.name).value);
+    // });
+    // comp.vectorForm.patchValue(obj);
+    // comp.vectorForm.updateValueAndValidity({onlySelf: true, emitEvent: true});
+
+
+
+  }
+
+  breakCoordinates(coords: string): string[] {
+    return coords.split(',');
+  }
 
   setMode(mode:string) {
     this.mode = mode;
@@ -107,7 +182,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   writeLayer() {
     // for now, write out a layer GML fragment. Ultimately, we'll POST it to th backend service
-
+    let elayer: ElementaryLayer = new ElementaryLayer();
     this.GML = 'layer [\r\n';
     this.GML += '\tcoordinates\t';
     let keys = Object.keys(this.vectorForm.controls);
@@ -115,6 +190,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     keys.forEach(key => { 
       coords.push(this.vectorForm.controls[key].value);
     });
+
     this.GML += coords.join(',') + '\r\n';
     this.GML += '\tgraph [\r\n';
     this.GML += '\t\tdirected 1\r\n';
@@ -128,6 +204,15 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.GML += '\t\t\tweight ' + edge.weight.toFixed(5).toString() + '\r\n\t\t]\r\n';
     })
     this.GML += '\t]\r\n]';
+
+    elayer.coordinates = coords.join(',');
+    elayer.edges = this.edges;
+    elayer.nodes = this.nodes;
+    if (this.create) {
+      this.store.dispatch(new layerActions.CreateLayer(elayer));
+    } else {
+      this.store.dispatch(new layerActions.UpdateLayer(elayer));
+    }
 
   }
 

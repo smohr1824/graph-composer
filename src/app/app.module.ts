@@ -11,11 +11,16 @@ import { IdService } from './shared/id.service';
 import { LayersModule } from './layers/layers.module';
 import { ActorComponent } from './actors/actor.component';
 import { ActorModule } from './actors/actor.module';
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, MetaReducer } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
+import { reducers } from './state/app.state';
+
+
+export const metaReducers: MetaReducer<any>[] = !environment.production
+  ? []
+  : [];
 
 @NgModule({
   declarations: [
@@ -30,7 +35,7 @@ import { COMPOSITION_BUFFER_MODE } from '@angular/forms';
     LayersModule,
     SharedModule,
     AppRoutingModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(reducers),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       name: 'graph-composer',
