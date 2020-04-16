@@ -15,11 +15,16 @@
           </div>
         </div>
     </form>
-    <!--<form *ngIf="!create" [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
-      <textarea *ngFor="let aspect of aspects;let idx=index" class="form-group">
-        {{aspect.name}}: {{coords[idx]}}
+    <form *ngIf="!create" [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
+      <div *ngFor="let aspect of aspects;let indx = index;" class="form-group">
+        <label class="control-label col-sm-offset-2" for={{aspect.name}}>{{aspect.name}}</label>
+        <div class="col-sm-6 ">
+          <select formControlName={{aspect.name}} id={{aspect.name}} name={{aspect.name}} class="form-control">
+            <option selected="'{{coords[indx]}}'">{{coords[indx]}}</option>
+          </select>
+        </div>
       </div>
-    </form> -->
+    </form>
     <div class="btn-group mr-auto" role="group" aria-label="Third group">
       <button type="button" class="btn btn-secondary" (click)='writeLayer()'>Upload</button>
     </div>

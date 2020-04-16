@@ -59,6 +59,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.nodes = [];
     this.edges = [];
+    this.coords = [];
     const id = this.route.snapshot.paramMap.get('id');
     // get the aspects and actors
     this.aspectState.pipe(select(fromAspects.getAspects), takeWhile(()=>this.componentActive)).subscribe(aspects => this.aspects = aspects);
@@ -85,12 +86,17 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.aspects.forEach((aspect, index) => { 
           controls[aspect.name]= new FormControl(aspect.layerSet[0]);
       });
-      this.vectorForm = this.fb.group(controls);
-    }
+    } else {
+      this.aspects.forEach((aspect, index) => {
+        controls[aspect.name] = new FormControl(this.coords[index]);
+        //controls[aspect.name].setValue(this.coords[index]);
+      });
+    }      
+    this.vectorForm = this.fb.group(controls);
+    this.vectorForm.updateValueAndValidity({onlySelf: true, emitEvent: true});
      
     this.actorForm = this.fb.group({
       actors: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : '')//,
-      //initialLevel: [(this.actors && this.actors.length > 0)?this.actors[0].initialLevel : 0, [Validators.required, Validators.min(0), Validators.max(1)]]//,
     });
 
     this.targetForm = this.fb.group({
@@ -98,10 +104,18 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       weight: [0, [Validators.required, Validators.min(-1), Validators.max(1)]]
     });
 
-    this.aspects.forEach((aspect, index) => { 
-      controls[aspect.name]= new FormControl(aspect[0]);
-    });
-    this.vectorForm = this.fb.group(controls);
+    // if (this.create) {
+    //   this.aspects.forEach((aspect, index) => { 
+    //     controls[aspect.name]= new FormControl(aspect[0]);
+    //   });
+    // } else {
+    //   this.aspects.forEach((aspect, index) => {
+    //     controls[aspect.name] = new FormControl(this.coords[index]);
+    //     controls[aspect.name].setValue(this.coords[index]);
+    //   })
+    // }
+
+    // this.vectorForm = this.fb.group(controls);
   }
 
   ngOnDestroy() {
@@ -137,39 +151,10 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onReceiptOfLayer(comp: LayerEditComponent) {
-
     // set the data
     comp.nodes = comp.layer.nodes;
     comp.edges = comp.layer.edges;
     comp.coords = comp.breakCoordinates(comp.layer.coordinates)
-
-    // update the aspect form control values
-
-    // let controls: FormControl[] = [];
-    // this.aspects.forEach((aspect, index) => { 
-    //   controls[aspect.name] = new FormControl('');
-    //   //controls[aspect.name].patchValue(comp.coords[index]);
-    // });
-    // console.log(controls);
-    // comp.vectorForm = comp.fb.group(controls);
-    // Object.keys(comp.vectorForm.controls).forEach((name, index) => {
-    //   if (comp.vectorForm[name]) {
-    //     comp.vectorForm.patchValue(comp.coords[index], {onlySelf: true, emitEvent: true});
-    //   }
-    // });
-    // comp.vectorForm.patchValue({Location:'JC'});
-
-    
-    // let obj = {};
-    // comp.aspects.forEach((aspect, index) => {
-    //   obj[aspect.name] = comp.coords[index];
-    //   console.log(comp.vectorForm.get(aspect.name).value);
-    // });
-    // comp.vectorForm.patchValue(obj);
-    // comp.vectorForm.updateValueAndValidity({onlySelf: true, emitEvent: true});
-
-
-
   }
 
   breakCoordinates(coords: string): string[] {
