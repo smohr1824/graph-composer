@@ -25,7 +25,6 @@ export class LayerService {
     const index = LAYERS.findIndex((lay:ElementaryLayer) => lay.coordinates === layer.coordinates);
     if (index === -1) {
       LAYERS = [...LAYERS, layer];  
-      console.log(LAYERS);
     } 
     return of(layer);
   }

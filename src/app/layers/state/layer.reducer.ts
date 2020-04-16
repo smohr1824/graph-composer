@@ -10,7 +10,6 @@ const initialState = {
 }
 
 export function reducer(state = initialState, action: LayerActions): fromLayers.ElementaryLayerState {
-  console.log('layer reducer: ' + action.type)
   switch(action.type) {
       case LayerActionTypes.LoadLayersSuccess:
         return {
@@ -56,7 +55,6 @@ export function reducer(state = initialState, action: LayerActions): fromLayers.
 
       case LayerActionTypes.CreateLayerSuccess:
         let s = state.layers;
-        console.log('in layer reducer for create layer')
         return {
           ...state,
           layers: [...s, action.payload],
