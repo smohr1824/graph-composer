@@ -17,11 +17,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { reducers } from './state/app.state';
 
-
-export const metaReducers: MetaReducer<any>[] = !environment.production
-  ? []
-  : [];
-
 @NgModule({
   declarations: [
     AppComponent,

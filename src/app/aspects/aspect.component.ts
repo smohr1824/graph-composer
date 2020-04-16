@@ -20,7 +20,6 @@ export class AspectComponent implements OnInit {
 
   ngOnInit() {
     this.store.pipe(select(fromAspects.getAspects), takeWhile(()=>this.componentActive)).subscribe(aspects => this.aspects = aspects);
-    //this.aspects = this.aspectService.getAspects();
   }
 
   ngOnDestroy() {

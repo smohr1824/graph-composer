@@ -40,7 +40,6 @@ import { LayerEffects } from './state/layer.effects';
         ]
       }
     ]),
-    //StoreModule.forFeature('layers', reducers),
     EffectsModule.forFeature([LayerEffects])
   ]
 })

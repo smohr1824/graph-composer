@@ -71,7 +71,6 @@ export class ActorEditComponent implements OnInit, OnDestroy {
       this.outActor.id = this.actor.id;
       this.outActor.name = this.actorForm.value['name'];
       this.outActor.initialLevel = +this.actorForm.value['initialLevel'];
-      //this.outActor.activationLevel = this.actorForm.value['activationLevel'];
 
       this.componentActive = false;
       if (this.create) {
@@ -87,11 +86,8 @@ export class ActorEditComponent implements OnInit, OnDestroy {
   cancel() {
     if (this.actorForm.valid) {
       this.outActor.id = this.actor.id;
-      //this.outActor.name = this.actorForm.value['name'];
-      //this.outActor.initialLevel = this.actorForm.value['initialLevel'];
       this.outActor.name = this.actor.name;
       this.outActor.initialLevel = this.actor.initialLevel;
-      //this.outActor.activationLevel = this.actorForm.value['activationLevel'];
     }
     this.router.navigate(['/actors']);
   }
@@ -104,10 +100,5 @@ export class ActorEditComponent implements OnInit, OnDestroy {
     if (this.outActor.initialLevel != +this.actorForm.value['initialLevel']) {
       return true;
     }
-
-    //if (this.outActor.activationLevel != + this.actorForm.value['activationLevel']) {
-    //  return true;
-    //}
   }
-
 }

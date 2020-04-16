@@ -7,7 +7,6 @@ import { ActorEditComponent } from './actoredit.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-//import { reducer } from './state/actor.reducer';
 import { reducers } from '../state/app.state';
 import { ActorEffects } from './state/actor.effects';
 import { EffectsModule } from '@ngrx/effects';
@@ -43,7 +42,6 @@ import { EffectsModule } from '@ngrx/effects';
         ]
       }
     ]),
-    //StoreModule.forFeature('actors', reducers),
     EffectsModule.forFeature([ActorEffects])
   ],
   providers: [

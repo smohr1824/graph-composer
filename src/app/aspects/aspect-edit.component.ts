@@ -37,7 +37,6 @@ export class AspectEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
-    //this.aspect = this.aspectService.getAspect(id);
 
     if (id === -1 ) {
       this.cardTitle = 'Add New Aspect';
@@ -103,7 +102,6 @@ export class AspectEditComponent implements OnInit, OnDestroy {
         this.outAspect.layerSet.push(element.layersetName);
       });
 
-      //this.aspectService.saveAspect(this.aspect);
       this.componentActive = false;
       if (this.create) {
         this.store.dispatch(new aspectActions.CreateAspect(this.outAspect));

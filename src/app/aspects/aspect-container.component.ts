@@ -35,7 +35,6 @@ export class AspectContainerComponent implements OnInit, OnDestroy {
   }
 
   deleteAspect(id: number) {
-    // this.aspectService.deleteAspect(id);
     this.store.dispatch(new aspectActions.DeleteAspect(id));
     this.aspects = this.aspects.filter((item, _) => item.id != id);
     this.currentAspect = this.aspects[0];

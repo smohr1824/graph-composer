@@ -20,7 +20,6 @@ export const getCurrentAspect = createSelector(
     getAspectFeatureState,
     getCurrentAspectId,
     (state, currentAspectId) => {
-        //return currentAspectId ? state.aspects.find(p => p.id === currentAspectId) : null;
         return state.aspects.find(p => p.id === currentAspectId);
     }
 

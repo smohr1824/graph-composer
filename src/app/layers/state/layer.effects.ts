@@ -42,8 +42,7 @@ export class LayerEffects {
    updateLayer$ = this.actions$.pipe(ofType(ElementaryLayerActions.LayerActionTypes.UpdateLayer),
    mergeMap((action: ElementaryLayerActions.UpdateLayer) => 
    this.layerService.updateLayer(action.payload).pipe(map((layer: ElementaryLayer) => 
-   (new ElementaryLayerActions.UpdateLayerSuccess(layer)))))
-   );
+   (new ElementaryLayerActions.UpdateLayerSuccess(layer))))));
            
    @Effect()
    createLayer$ = this.actions$.pipe(ofType(ElementaryLayerActions.LayerActionTypes.CreateLayer),

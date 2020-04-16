@@ -45,7 +45,6 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private canvasRect: ClientRect;
   private create: boolean;
   private coords: string[];
-  // The next property is temporary -- dev only
   private GML: string;
   layer: ElementaryLayer;
 
@@ -60,6 +59,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.nodes = [];
     this.edges = [];
     this.coords = [];
+    this.layer = new ElementaryLayer();
     const id = this.route.snapshot.paramMap.get('id');
     // get the aspects and actors
     this.aspectState.pipe(select(fromAspects.getAspects), takeWhile(()=>this.componentActive)).subscribe(aspects => this.aspects = aspects);
@@ -74,7 +74,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.store.pipe(select(fromLayers.getElementaryLayer, {coords: idX}), 
         takeWhile(() => this.componentActive)).subscribe(lay => {
           this.layer = lay;
-          this.onReceiptOfLayer(this);
+          this.onReceiptOfLayer();
       });
 
       this.create = false;
@@ -89,7 +89,6 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.aspects.forEach((aspect, index) => {
         controls[aspect.name] = new FormControl(this.coords[index]);
-        //controls[aspect.name].setValue(this.coords[index]);
       });
     }      
     this.vectorForm = this.fb.group(controls);
@@ -103,19 +102,6 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       targets: new FormControl((this.actors && this.actors.length > 0)?this.actors[0].name : ''),
       weight: [0, [Validators.required, Validators.min(-1), Validators.max(1)]]
     });
-
-    // if (this.create) {
-    //   this.aspects.forEach((aspect, index) => { 
-    //     controls[aspect.name]= new FormControl(aspect[0]);
-    //   });
-    // } else {
-    //   this.aspects.forEach((aspect, index) => {
-    //     controls[aspect.name] = new FormControl(this.coords[index]);
-    //     controls[aspect.name].setValue(this.coords[index]);
-    //   })
-    // }
-
-    // this.vectorForm = this.fb.group(controls);
   }
 
   ngOnDestroy() {
@@ -128,11 +114,9 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     
       // get the context
         this.canvasEl = document.querySelector('canvas');
-        //this.vectorForm = document.querySelector('form');
         this.cx = this.canvasEl.getContext('2d');
     
         // set the width and height
-        //this.canvasEl.width = this.width;
         this.canvasEl.width = this.width;
         this.canvasEl.height = this.height;
     
@@ -142,7 +126,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cx.strokeStyle = '#000000';
         this.cx.fillStyle = '#000000';
 
-        fromEvent(this.canvasEl, 'click').subscribe((evt:MouseEvent)=>this.clickCanvas(this,evt), takeWhile(_=>this.componentActive));
+        fromEvent(this.canvasEl, 'click').subscribe((evt:MouseEvent)=>this.clickCanvas(evt), takeWhile(_=>this.componentActive));
         this.canvasRect = this.canvasEl.getBoundingClientRect();
 
         if (!this.create) {
@@ -150,11 +134,11 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
         }
   }
 
-  onReceiptOfLayer(comp: LayerEditComponent) {
+  onReceiptOfLayer() {
     // set the data
-    comp.nodes = comp.layer.nodes;
-    comp.edges = comp.layer.edges;
-    comp.coords = comp.breakCoordinates(comp.layer.coordinates)
+    this.nodes = this.layer.nodes;
+    this.edges = this.layer.edges;
+    this.coords = this.breakCoordinates(this.layer.coordinates)
   }
 
   breakCoordinates(coords: string): string[] {
@@ -201,12 +185,11 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  clickCanvas(comp: LayerEditComponent, evt: MouseEvent){
-
-    let selectedActor = comp.actorForm.value['actors'];
-    let selectedTarget = comp.targetForm.value['targets'];
+  clickCanvas(evt: MouseEvent){
+    let selectedActor = this.actorForm.value['actors'];
+    let selectedTarget = this.targetForm.value['targets'];
     
-    let rect = comp.canvasEl.getBoundingClientRect();
+    let rect = this.canvasEl.getBoundingClientRect();
     let x = evt.clientX - rect.left;
     let y = evt.clientY - rect.top;
 
@@ -217,54 +200,54 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
         if (actor) {
           initial = actor.initialLevel;
         }
-        //let initial = +comp.actorForm.value['initialLevel'];
+
         let nodeId = this.addNode(selectedActor, x, y, initial);
         if (nodeId > -1) {
-          this.drawNode(this, x, y, selectedActor, initial);
+          this.drawNode(x, y, selectedActor, initial);
         }
         break;
 
       case 'influence':
-        let weight = +comp.targetForm.value['weight'];
-        let edgeId = this.addEdge(this, selectedActor, selectedTarget, weight);
+        let weight = +this.targetForm.value['weight'];
+        let edgeId = this.addEdge(selectedActor, selectedTarget, weight);
         if (edgeId > -1) {
-          this.drawEdge(this, edgeId, weight);
+          this.drawEdge(edgeId, weight);
         }
         break;
       
       case 'delete':
-        let id = comp.hitTestNode(x, y);
+        let id = this.hitTestNode(x, y);
         if (id != -1) {
           
           // clicked on a node, delete the node -- side effect is to delete all incident edges
-          comp.deleteNode(id);
-          comp.redraw();
+          this.deleteNode(id);
+          this.redraw();
         } else {
-          id = comp.hitTestEdge(x, y);
+          id = this.hitTestEdge(x, y);
           if (id != -1) {
-            comp.deleteEdge(id);
-            comp.redraw();
+            this.deleteEdge(id);
+            this.redraw();
           }
         }
         break; 
     }
   }
 
-  drawNode(comp: LayerEditComponent, x: number, y: number, label: string, level: number) {
-    comp.cx.beginPath();
-    comp.cx.arc(x, y, RADIUS, 0, 2*Math.PI, false);
-    comp.cx.stroke();
-    comp.cx.font = '12px Arial';
-    comp.cx.textAlign = 'center';
-    comp.cx.textBaseline = 'middle';
-    comp.cx.fillText(label, x, y + 24);
+  drawNode(x: number, y: number, label: string, level: number) {
+    this.cx.beginPath();
+    this.cx.arc(x, y, RADIUS, 0, 2*Math.PI, false);
+    this.cx.stroke();
+    this.cx.font = '12px Arial';
+    this.cx.textAlign = 'center';
+    this.cx.textBaseline = 'middle';
+    this.cx.fillText(label, x, y + 24);
     if (level <= 0){
       this.setNegative();
-      comp.cx.fillText(level.toFixed(1).toString(), x, y);
+      this.cx.fillText(level.toFixed(1).toString(), x, y);
       this.setPositive();
     } else {
       this.setPositive();
-      comp.cx.fillText(level.toFixed(1).toString(), x, y);
+      this.cx.fillText(level.toFixed(1).toString(), x, y);
     }
   }
 
@@ -286,7 +269,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       node.x = x;
       node.y = y;
-      this.nodes.push(node);
+      this.nodes = this.nodes.concat(node);
       return node.id
     }
     return -1;
@@ -299,44 +282,42 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.edges = this.edges.filter(edge => (edge.source != id && edge.target != id));
   }
 
-  drawEdge(comp: LayerEditComponent, id: number, wt: number) {
+  drawEdge(id: number, wt: number) {
     let edge = this.edges.find(edge => edge.id === id)
     if (edge != null) {
       if (wt <= 0) {
-        comp.setNegative();
+        this.setNegative();
       }
-      comp.cx.beginPath();
-      comp.cx.moveTo(edge.startX, edge.startY);
-      comp.cx.lineTo(edge.endX, edge.endY);
-        
-      
-      comp.cx.font = '12px Arial';
-      comp.cx.textAlign = 'center';
-      comp.cx.textBaseline = 'middle';
-      comp.cx.fillText(wt.toFixed(2).toString(), edge.labelX, edge.labelY);
-
-      comp.cx.stroke();
+      this.cx.beginPath();
+      this.cx.moveTo(edge.startX, edge.startY);
+      this.cx.lineTo(edge.endX, edge.endY);
+      this.cx.font = '12px Arial';
+      this.cx.textAlign = 'center';
+      this.cx.textBaseline = 'middle';
+      this.cx.fillText(wt.toFixed(2).toString(), edge.labelX, edge.labelY);
+      this.cx.stroke();
 
       // now do the arrow head
-      comp.cx.beginPath();
-      comp.cx.moveTo(edge.endX, edge.endY);
-      comp.cx.lineTo(edge.endX-HEADSIZE*Math.cos(edge.theta-Math.PI/7), edge.endY-HEADSIZE*Math.sin(edge.theta-Math.PI/7));
+      this.cx.beginPath();
+      this.cx.moveTo(edge.endX, edge.endY);
+      this.cx.lineTo(edge.endX-HEADSIZE*Math.cos(edge.theta-Math.PI/7), edge.endY-HEADSIZE*Math.sin(edge.theta-Math.PI/7));
+      
       // from one side of the head to the other
-      comp.cx.lineTo(edge.endX-HEADSIZE*Math.cos(edge.theta+Math.PI/7), edge.endY-HEADSIZE*Math.sin(edge.theta+Math.PI/7));
+      this.cx.lineTo(edge.endX-HEADSIZE*Math.cos(edge.theta+Math.PI/7), edge.endY-HEADSIZE*Math.sin(edge.theta+Math.PI/7));
 
       // side to tip
-      comp.cx.lineTo(edge.endX, edge.endY);
-      //comp.cx.lineTo(edge.endX-HEADSIZE*Math.cos(edge.theta-Math.PI/7), edge.endY-HEADSIZE*Math.sin(edge.theta-Math.PI/7));
-      comp.cx.stroke();
-      comp.cx.fill();
+      this.cx.lineTo(edge.endX, edge.endY);
+      this.cx.stroke();
+      this.cx.fill();
 
       this.setPositive();
     }
   }
 
-  addEdge(comp: LayerEditComponent, src: string, tgt: string, wt: number): number {
+  addEdge(src: string, tgt: string, wt: number): number {
     let srcActor = this.nodes.find(actor => actor.concept.name === src);
     let tgtActor = this.nodes.find(actor => actor.concept.name === tgt);
+
 
     let reciprocalEdge = this.edges.find(edge => edge.source === tgtActor.id && edge.target === srcActor.id);
     if (srcActor != null && tgtActor != null && srcActor.id != tgtActor.id) {
@@ -369,8 +350,8 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       edge.labelX = edge.startX + (edge.endX - edge.startX)/2;
       edge.labelY = edge.startY + (edge.endY - edge.startY)/2;
-      edge.weight = wt;//+comp.targetForm.value['weight'];
-      this.edges.push(edge);
+      edge.weight = wt;
+      this.edges = this.edges.concat(edge);
       return edge.id;
     }
     return -1;
@@ -383,11 +364,11 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   redraw() {
     this.cx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
     this.nodes.forEach(node => {
-      this.drawNode(this, node.x, node.y, node.concept.name, node.concept.initial);
+      this.drawNode(node.x, node.y, node.concept.name, node.concept.initial);
     });
 
     this.edges.forEach(edge => {
-      this.drawEdge(this, edge.id, edge.weight);
+      this.drawEdge(edge.id, edge.weight);
     });
   }
 
@@ -429,12 +410,12 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return id;
   }
 
-  mouseToRelativeX(comp: LayerEditComponent, mouseX: number): number {
-    return mouseX - comp.canvasRect.left;
+  mouseToRelativeX(mouseX: number): number {
+    return mouseX - this.canvasRect.left;
   }
 
-  mouseToRelativeY(comp: LayerEditComponent, mouseY: number): number {
-    return mouseY - comp.canvasRect.top;
+  mouseToRelativeY(mouseY: number): number {
+    return mouseY - this.canvasRect.top;
   }
 
   setPositive() {

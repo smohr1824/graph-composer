@@ -11,7 +11,6 @@ import { AspectEditComponent } from './aspect-edit.component';
 import { SharedModule } from '../shared/shared.module';
 import { PageNotFoundComponent } from '../shared/page-not-found.component';
 import { StoreModule } from '@ngrx/store';
-//import { reducer } from './state/aspect.reducer';
 import { reducers } from '../state/app.state';
 import { AspectEffects } from './state/aspect.effects';
 import { EffectsModule } from '@ngrx/effects';

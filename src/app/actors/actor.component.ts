@@ -41,8 +41,6 @@ export class ActorComponent implements OnInit, OnDestroy {
 
   deleteActor(id: number) {
     this.store.dispatch(new actorActions.DeleteActor(id));
-    //this.actors = this.actors.filter((item, _) => item.id != id);
-    //this.actor = this.actors[0];
   }
 
 }

@@ -32,7 +32,7 @@ export class LayerService {
   updateLayer(layer: ElementaryLayer): Observable<ElementaryLayer> {
     const index = LAYERS.findIndex((lay:ElementaryLayer) => lay.coordinates === layer.coordinates);
     if (index != -1) {
-      LAYERS = LAYERS.filter((item, _) => item.coordinates != layer.coordinates);
+      LAYERS = LAYERS.map((item, _) => item.coordinates == layer.coordinates ? layer : item);
       return of(layer);
     } else {
       return of(null);
