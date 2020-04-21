@@ -1,0 +1,38 @@
+<div class="card">
+    <div class="card-header">
+      {{title}}
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group row mb-2">
+                <label for="name" class="col-md-1 col-form-label">Name: </label>
+                <input class="form-control col-md-8" name="name" id="name" placeholder="name of ML FCM (required)"/>
+            </div>
+            
+            <div class="form-group form-check form-check-inline">
+                <span class="form-check-inline col-form-label">Threshold function: </span>
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="threshradio">Bivalent
+                </label>
+            </div>
+            <div class="form-group form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="threshradio">Trivalent
+                </label>
+            </div>
+            <div class="form-group form-check form-check-inline">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input" name="threshradio">Logistic
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" name="rulecheck" value="true">Use modified kosko rule
+                </label>
+            </div>   
+            <div class="form-group"> 
+                <button name="setBtn" (click)="SetDefn()" class="btn btn-primary btn-sm">Set Definition</button>
+            </div>
+        </form>
+    </div>  
+</div>

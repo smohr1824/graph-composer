@@ -16,6 +16,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { reducers } from './state/app.state';
+import { NetworkModule } from './network/network.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { reducers } from './state/app.state';
   ],
   imports: [
     BrowserModule,
+    NetworkModule,
     AspectModule,
     ActorModule,
     LayersModule,

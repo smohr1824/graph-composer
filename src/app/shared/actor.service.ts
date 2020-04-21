@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, OnInit } from '@angular/core';
+import { Observable, of, from } from 'rxjs';
+import * as localforage from 'localforage';
 import { Actor } from './actor';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActorService {
-
   constructor() { }
 
   getActors(): Observable<Actor[]> {
-    return of(ACTORS);
+      return of(ACTORS);
   }
   getActor(id: number): Observable<Actor> {
     return of(ACTORS.find((actor) => actor.id === id));
@@ -33,6 +34,7 @@ export class ActorService {
       return of(id);
     }
   }
+
 }
 
 let ACTORS: Actor[] = [ ];

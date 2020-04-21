@@ -61,6 +61,20 @@ export function reducer(state = initialState, action: ActorActions): fromActors.
           error: ''
         }
 
+      case ActorActionTypes.SaveActorsSuccess:
+        return {
+          ...state,
+          actors: [...s],
+          error: ''
+        }
+
+      case ActorActionTypes.SaveActorsFailure:
+        return {
+          ...state,
+          actors: [...s],
+          error: 'Failure to save actors locally'
+        }
+
       default:
         return state;
     }

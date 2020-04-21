@@ -43,4 +43,8 @@ export class ActorComponent implements OnInit, OnDestroy {
     this.store.dispatch(new actorActions.DeleteActor(id));
   }
 
+  saveAll() {
+    this.store.dispatch(new actorActions.SaveActors('foo'));
+  }
+
 }

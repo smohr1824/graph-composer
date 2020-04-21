@@ -13,7 +13,10 @@ export enum ActorActionTypes {
     DeleteActorFailure = '[Actor] Delete Actor Failure',
     UpdateActor = '[Actor] Update Actor',
     UpdateActorSuccess = '[Actor] Update Actor Success',
-    UpdateActorFailure = '[Actor] Update Actor Failure'
+    UpdateActorFailure = '[Actor] Update Actor Failure',
+    SaveActors = '[Actor] Save Actors',
+    SaveActorsSuccess = '[Actor] Save Actors Success',
+    SaveActorsFailure = '[Actor] Save Actors Failure'
 }
 
 // Actor CRUD operations will always go through the remote service
@@ -90,6 +93,24 @@ export class UpdateActorFailure implements Action {
     constructor(public payload: string) { }
 }
 
+export class SaveActors implements Action {
+    readonly type = ActorActionTypes.SaveActors;
+
+    constructor(public payload: string) { }
+}
+
+export class SaveActorsSuccess implements Action {
+    readonly type = ActorActionTypes.SaveActorsSuccess;
+
+    constructor(public paload: number) { }
+}
+
+export class SaveActorsFailure implements Action {
+    readonly type = ActorActionTypes.SaveActorsFailure;
+
+    constructor(public payload: string) { }
+}
+
 export type ActorActions = LoadActors
     | LoadActors
     | LoadActorsSuccess
@@ -102,4 +123,7 @@ export type ActorActions = LoadActors
     | DeleteActorFailure
     | UpdateActor
     | UpdateActorSuccess
-    | UpdateActorFailure;
+    | UpdateActorFailure
+    | SaveActors
+    | SaveActorsSuccess
+    | SaveActorsFailure;

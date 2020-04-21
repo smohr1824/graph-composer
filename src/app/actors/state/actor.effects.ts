@@ -42,4 +42,5 @@ export class ActorEffects {
    mergeMap((action: ActorActions.CreateActor) =>
    this.ActorService.saveActor(action.payload).pipe(map((asp: Actor) =>
    (new ActorActions.CreateActorSuccess(action.payload))))));
+
 }

@@ -5,7 +5,6 @@ export interface AspectState {
     currentAspectId: number;
     aspects: Aspect[];
     error: string;
-
 }
 
 // Selector functions
