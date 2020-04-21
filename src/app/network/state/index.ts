@@ -1,9 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 export enum thresholdType {
-    Bivalent = 1,
-    Trivalent = 2,
-    Logistic = 3
+    Bivalent = '1',
+    Trivalent = '2',
+    Logistic = '3'
 }
 
 export interface NetworkState {
