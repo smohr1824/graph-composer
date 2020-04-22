@@ -1,6 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Observable, of, from } from 'rxjs';
-import * as localforage from 'localforage';
 import { Actor } from './actor';
 import { mergeMap } from 'rxjs/operators';
 
@@ -25,6 +24,11 @@ export class ActorService {
       ACTORS = [...ACTORS.slice(0, index), actor, ...ACTORS.slice(index + 1)];
     }
     return of(actor);
+  }
+
+  saveActors(actors: Actor[]): Observable<Actor[]> {
+    ACTORS = actors;
+    return of(actors);
   }
 
   deleteActor(id: number): Observable<number> {

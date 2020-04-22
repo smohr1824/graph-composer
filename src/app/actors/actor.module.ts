@@ -10,6 +10,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from '../state/app.state';
 import { ActorEffects } from './state/actor.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { ActorState } from './state';
 
 
 @NgModule({

@@ -96,7 +96,7 @@ export class UpdateActorFailure implements Action {
 export class SaveActors implements Action {
     readonly type = ActorActionTypes.SaveActors;
 
-    constructor(public payload: string) { }
+    constructor(public payload: Actor[]) { }
 }
 
 export class SaveActorsSuccess implements Action {

@@ -11,7 +11,7 @@ import { IdService } from './shared/id.service';
 import { LayersModule } from './layers/layers.module';
 import { ActorComponent } from './actors/actor.component';
 import { ActorModule } from './actors/actor.module';
-import { StoreModule, MetaReducer } from '@ngrx/store';
+import { StoreModule, MetaReducer, Store } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
@@ -41,7 +41,7 @@ import { NetworkModule } from './network/network.module';
     })
   ],
   providers: [ 
-            IdService 
+            IdService
           ],
   bootstrap: [AppComponent]
 })

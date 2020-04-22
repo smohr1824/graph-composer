@@ -1,9 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as fromState from './state';
 import { MLFCM } from '../shared/mlfcm';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import * as netactions from './state/network.actions';
+import * as aspectActions from '../aspects/state/aspect.actions';
+import * as actorActions from '../actors/state/actor.actions';
+import * as layerActions from '../layers/state/layer.actions';
+import * as localforage from 'localforage';
+import { AspectState } from '../aspects/state';
+import { ElementaryLayerState } from '../layers/state';
+import { ActorState } from '../actors/state';
 
 @Component({
   selector: 'app-networkdefinition',
@@ -12,17 +19,23 @@ import * as netactions from './state/network.actions';
 })
 export class NetworkdefinitionComponent implements OnInit {
   private title = 'Top-Level Definition';
-  private network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: []};
+  private network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
   private componentActive = false;
 
-  constructor(private store: Store<fromState.NetworkState> ) { }
+  constructor(private store: Store<fromState.NetworkState>,
+    private aspectStore: Store<AspectState>,
+    private actorStore: Store<ActorState>,
+    private layerStore: Store<ElementaryLayerState> ) { }
 
   ngOnInit() {
-    this.store.pipe(select(fromState.getNetworkName), takeWhile(()=>this.componentActive)).subscribe(name => this.network.name = name);
-    this.store.pipe(select(fromState.getNetworkThreshold), takeWhile(()=>this.componentActive)).subscribe(thresh => this.network.threshold = thresh);
-    this.store.pipe(select(fromState.getNetworkModified), takeWhile(()=>this.componentActive)).subscribe(mod => this.network.modifiedKosko = mod);
+    let mlname: string;
+    this.store.pipe(select(fromState.getNetworkName), take(1)).subscribe(name => { mlname = name; } );
+    if (mlname != null && mlname != '') {
+      this.network.name = mlname;
 
-
+      this.store.pipe(select(fromState.getNetworkThreshold), take(1)).subscribe(thresh => {this.network.threshold = thresh;});
+      this.store.pipe(select(fromState.getNetworkModified), take(1)).subscribe(mod => this.network.modifiedKosko = mod);
+    }    
   }
 
   ngOnDestroy() {
@@ -33,6 +46,18 @@ export class NetworkdefinitionComponent implements OnInit {
     this.store.dispatch(new netactions.SetNetworkName(this.network.name));
     this.store.dispatch(new netactions.SetNetworkThreshold(this.network.threshold));
     this.store.dispatch(new netactions.SetNetworkRule(this.network.modifiedKosko));
+
+    let ml:MLFCM;
+    localforage.getItem(this.network.name, s => {ml = s;} );
+    if (ml != null) {
+      this.updateGlobal(ml);
+    }
+  }
+
+  updateGlobal(ml: MLFCM) {
+    //this.aspectStore.dispatch(aspectActions.s);
+    this.actorStore.dispatch(new actorActions.SaveActors(ml.actors));
+    //this.layerStore.dispatch(new layerActions.s)
   }
 
 }

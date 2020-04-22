@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
-import { CONTEXT_NAME } from '@angular/compiler/src/render3/view/util';
+import * as localforage from 'localforage';
 import { fromEvent, Subscription } from 'rxjs';
-import { map, takeWhile } from 'rxjs/operators';
+import { map, takeWhile, take } from 'rxjs/operators';
 import { Aspect } from '../shared/aspect';
 import { Actor } from '../shared/actor';
 import { IdService } from '../shared/id.service';
+import * as fromNetwork from '../network/state';
 import * as fromAspects from '../aspects/state';
 import * as fromActors from '../actors/state';
 import * as fromLayers from './state';
@@ -18,6 +19,8 @@ import { Store, select } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { ElementaryLayer } from '../shared/elementary-layer';
 import { LayerActionTypes } from './state/layer.actions';
+import { State } from '../state/app.state';
+import { MLFCM } from '../shared/mlfcm';
 
 const RADIUS = 15;
 const HEADSIZE = 10;
@@ -37,7 +40,9 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private actorForm: FormGroup;
   private targetForm: FormGroup;
   private componentActive = true;
-  aspects: Aspect[];
+  private netname: string;
+  private networkProps: fromNetwork.NetworkState;
+  private aspects: Aspect[];
   private actors: Actor[];
   private nodes: data.Node[];
   private edges: data.Edge[];
@@ -49,6 +54,8 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   layer: ElementaryLayer;
 
   constructor(private route: ActivatedRoute,
+    private appState: Store<State>,
+    private networkState: Store<fromNetwork.NetworkState>,
     private aspectState: Store<fromAspects.AspectState>, 
     private actorState: Store<fromActors.ActorState>, 
     private store: Store<fromLayers.ElementaryLayerState>,
@@ -61,9 +68,16 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.coords = [];
     this.layer = new ElementaryLayer();
     const id = this.route.snapshot.paramMap.get('id');
-    // get the aspects and actors
+    // get the network name, aspects and actors
+    // Get the current value, then subscribe to changes
+    this.networkState.pipe(select(fromNetwork.getNetworkName), take(1)).subscribe(
+      s => { this.netname = s; console.log('got state: ' + s); }
+    );
+
+    this.aspectState.pipe(select(fromNetwork.getNetworkName), takeWhile(()=>this.componentActive)).subscribe(name => this.netname = name);
     this.aspectState.pipe(select(fromAspects.getAspects), takeWhile(()=>this.componentActive)).subscribe(aspects => this.aspects = aspects);
     this.actorState.pipe(select(fromActors.getActors), takeWhile(()=>this.componentActive)).subscribe(actors => this.actors = actors);
+
 
     if (id === '-1' ) {
       this.create = true;
@@ -74,10 +88,28 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.store.pipe(select(fromLayers.getElementaryLayer, {coords: idX}), 
         takeWhile(() => this.componentActive)).subscribe(lay => {
           this.layer = lay;
-          this.onReceiptOfLayer();
+
+          // this.onReceiptOfLayer();
       });
 
+      console.log('layer: ' + this.layer);
+      if (this.layer == null) {
+        console.log('layer is null, netname is ' + this.netname);
+        // is the layer saved to local storage?
+        if (this.netname != null && this.netname != '') {
+          let key: string = this.netname + ':' + id;
+          console.log(key);
+          localforage.getItem(key, layer => {
+            this.layer = layer;
+          });
+
+        }
+      }
+
       this.create = false;
+      if (this.layer != null) {
+        this.onReceiptOfLayer();
+      }
     }
 
     let controls = {};
@@ -177,10 +209,20 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     elayer.coordinates = coords.join(',');
     elayer.edges = this.edges;
     elayer.nodes = this.nodes;
+
     if (this.create) {
       this.store.dispatch(new layerActions.CreateLayer(elayer));
     } else {
       this.store.dispatch(new layerActions.UpdateLayer(elayer));
+    }
+
+    let ml = this.getGlobalState();
+
+    console.log(ml);
+    console.log('layers: ' + ml.layers.length);
+
+    if (ml.name != null && ml.name != '') {
+      localforage.setItem(ml.name, ml);
     }
 
   }
@@ -426,6 +468,33 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   setNegative() {
     this.cx.fillStyle = '#8B0000';
     this.cx.strokeStyle = '#8B0000';
+  }
+
+  getGlobalState(): MLFCM {
+    let ml = new MLFCM();
+    this.networkState.pipe(select(fromNetwork.getNetworkName), take(1)).subscribe(
+      s => { ml.name = s;  }
+    );
+    this.networkState.pipe(select(fromNetwork.getNetworkThreshold), take(1)).subscribe(
+      s => { ml.threshold = s; }
+    );
+    this.networkState.pipe(select(fromNetwork.getNetworkModified), take(1)).subscribe(
+      s => { ml.modifiedKosko = s; }
+    );
+
+    this.aspectState.pipe(select(fromAspects.getAspects), take(1)).subscribe(
+      s => { ml.aspects = s ;}
+    );
+
+    this.actorState.pipe(select(fromActors.getActors), take(1)).subscribe(
+      s => { ml.actors = s; }
+    );
+
+    this.store.pipe(select(fromLayers.getLayers), take(1)).subscribe(
+      s => {ml.layers = s; }
+    );
+
+    return ml;
   }
 
 }

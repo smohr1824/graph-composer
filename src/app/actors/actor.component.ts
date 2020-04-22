@@ -21,7 +21,7 @@ export class ActorComponent implements OnInit, OnDestroy {
 
   constructor( private store: Store<fromActors.ActorState>) {
 
-   }
+  }
 
   ngOnInit() {
     this.store.dispatch(new actorActions.LoadActors());
@@ -44,7 +44,7 @@ export class ActorComponent implements OnInit, OnDestroy {
   }
 
   saveAll() {
-    this.store.dispatch(new actorActions.SaveActors('foo'));
+    this.store.dispatch(new actorActions.SaveActors(this.actors));
   }
 
 }

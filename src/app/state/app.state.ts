@@ -1,4 +1,4 @@
-import { ActionReducerMap } from '@ngrx/store';
+import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
 
 import { AspectState } from '../aspects/state';
 import { ActorState } from '../actors/state';
@@ -24,3 +24,4 @@ export const reducers: ActionReducerMap<State> = {
     actors: actorReducer.reducer,
     layers: layerReducer.reducer
 }
+

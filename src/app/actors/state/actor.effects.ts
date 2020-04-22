@@ -43,4 +43,10 @@ export class ActorEffects {
    this.ActorService.saveActor(action.payload).pipe(map((asp: Actor) =>
    (new ActorActions.CreateActorSuccess(action.payload))))));
 
+   @Effect()
+   saveActors$ = this.actions$.pipe(ofType(ActorActions.ActorActionTypes.SaveActors),
+   mergeMap((action: ActorActions.SaveActors) => 
+   this.ActorService.saveActors(action.payload).pipe(map((acts: Actor[]) =>
+   (new ActorActions.SaveActorsSuccess(action.payload.length))))));
+
 }
