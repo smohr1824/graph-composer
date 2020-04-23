@@ -71,7 +71,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     // get the network name, aspects and actors
     // Get the current value, then subscribe to changes
     this.networkState.pipe(select(fromNetwork.getNetworkName), take(1)).subscribe(
-      s => { this.netname = s; console.log('got state: ' + s); }
+      s => { this.netname = s; }
     );
 
     this.aspectState.pipe(select(fromNetwork.getNetworkName), takeWhile(()=>this.componentActive)).subscribe(name => this.netname = name);
@@ -92,21 +92,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
           // this.onReceiptOfLayer();
       });
 
-      console.log('layer: ' + this.layer);
-      // if (this.layer == null) {
-      //   console.log('layer is null, netname is ' + this.netname);
-      //   // is the layer saved to local storage?
-      //   if (this.netname != null && this.netname != '') {
-      //     let key: string = this.netname + ':' + id;
-      //     console.log(key);
-      //     localforage.getItem(key, layer => {
-      //       this.layer = layer;
-      //     });
-
-      //   }
-      // }
-
-      this.create = false;
+       this.create = false;
       if (this.layer != null) {
         this.onReceiptOfLayer();
       }
@@ -217,9 +203,6 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     let ml = this.getGlobalState();
-
-    console.log(ml);
-    console.log('layers: ' + ml.layers.length);
 
     if (ml.name != null && ml.name != '') {
       localforage.setItem(ml.name, ml);

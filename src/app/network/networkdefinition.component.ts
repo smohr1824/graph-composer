@@ -21,6 +21,7 @@ export class NetworkdefinitionComponent implements OnInit {
   private title = 'Top-Level Definition';
   private network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
   private componentActive = false;
+  private preExisting = false;
 
   constructor(private store: Store<fromState.NetworkState>,
     private aspectStore: Store<AspectState>,
@@ -29,13 +30,15 @@ export class NetworkdefinitionComponent implements OnInit {
 
   ngOnInit() {
     let mlname: string;
-    this.store.pipe(select(fromState.getNetworkName), take(1)).subscribe(name => { mlname = name; } );
-    if (mlname != null && mlname != '') {
-      this.network.name = mlname;
-
-      this.store.pipe(select(fromState.getNetworkThreshold), take(1)).subscribe(thresh => {this.network.threshold = thresh;});
-      this.store.pipe(select(fromState.getNetworkModified), take(1)).subscribe(mod => this.network.modifiedKosko = mod);
-    }    
+    this.store.pipe(select(fromState.getNetworkName), take(1)).subscribe(name => { 
+      mlname = name;     
+      if (mlname != null && mlname != '') {
+        this.network.name = mlname;
+        this.preExisting = true;
+        this.store.pipe(select(fromState.getNetworkThreshold), take(1)).subscribe(thresh => {this.network.threshold = thresh;});
+        this.store.pipe(select(fromState.getNetworkModified), take(1)).subscribe(mod => this.network.modifiedKosko = mod);
+      } 
+    });
   }
 
   ngOnDestroy() {
@@ -48,17 +51,16 @@ export class NetworkdefinitionComponent implements OnInit {
     this.store.dispatch(new netactions.SetNetworkRule(this.network.modifiedKosko));
 
     let ml:MLFCM;
-    console.log('checking for network state, name= ' + this.network.name);
-    localforage.getItem(this.network.name, (err, s: MLFCM) => {
-      ml = s; if (ml != null) {
-        this.updateGlobal(ml);
-      }
-    });
-
+    if (!this.preExisting) {
+      localforage.getItem(this.network.name, (err, s: MLFCM) => {
+        ml = s; if (ml != null) {
+          this.updateGlobal(ml);
+        }
+      });
+    }
   }
 
   updateGlobal(ml: MLFCM) {
-    console.log('in updateGlobal');
     this.aspectStore.dispatch(new aspectActions.SetAspects(ml.aspects));
     this.actorStore.dispatch(new actorActions.SaveActors(ml.actors));
     this.layerStore.dispatch(new layerActions.SetLayers(ml.layers));
