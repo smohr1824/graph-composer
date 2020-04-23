@@ -33,8 +33,9 @@ export enum LayerActionTypes {
     UpdateLayerFailure = '[Layer] Update Layer Failure',
     GetLayer = "[Layer] Get Layer",
     GetLayerSuccess = '[Layer] Get Layer Success',
-    GetLayerFailure = '[Layer] Get Layer Failure'
-    
+    GetLayerFailure = '[Layer] Get Layer Failure',
+    SetLayers = '[Layer] Set Layers',
+    SetLayersSuccess = '[Layer] Set Layers Success'
 }
 
 // action class denoting an action only, i.e., no payload
@@ -129,6 +130,18 @@ export class UpdateLayerFailure implements Action {
     constructor(public payload: string) { }
 }
 
+export class SetLayers implements Action {
+    readonly type = LayerActionTypes.SetLayers;
+
+    constructor(public payload: ElementaryLayer[]) { }
+}
+
+export class SetLayersSuccess implements Action {
+    readonly type = LayerActionTypes.SetLayersSuccess;
+
+    constructor(public payload: ElementaryLayer[])  { }
+}
+
 export type LayerActions = LoadLayers
     | LoadLayers
     | LoadLayersSuccess
@@ -144,4 +157,6 @@ export type LayerActions = LoadLayers
     | UpdateLayerFailure
     | GetLayer
     | GetLayerSuccess
-    | GetLayerFailure;
+    | GetLayerFailure
+    | SetLayers
+    | SetLayersSuccess;

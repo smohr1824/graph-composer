@@ -49,4 +49,10 @@ export class LayerEffects {
    mergeMap((action: ElementaryLayerActions.CreateLayer) =>
    this.layerService.createLayer(action.payload).pipe(map((lay: ElementaryLayer) =>
    (new ElementaryLayerActions.CreateLayerSuccess(action.payload))))));
+
+   @Effect()
+   setLayers$ = this.actions$.pipe(ofType(ElementaryLayerActions.LayerActionTypes.SetLayers),
+   mergeMap((action: ElementaryLayerActions.SetLayers) =>
+   this.layerService.setLayers(action.payload).pipe(map((lays: ElementaryLayer[]) =>
+   (new ElementaryLayerActions.SetLayersSuccess(action.payload))))));
 }

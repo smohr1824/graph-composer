@@ -47,6 +47,6 @@ export class ActorEffects {
    saveActors$ = this.actions$.pipe(ofType(ActorActions.ActorActionTypes.SaveActors),
    mergeMap((action: ActorActions.SaveActors) => 
    this.ActorService.saveActors(action.payload).pipe(map((acts: Actor[]) =>
-   (new ActorActions.SaveActorsSuccess(action.payload.length))))));
+   (new ActorActions.SaveActorsSuccess(action.payload))))));
 
 }

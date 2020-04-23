@@ -84,6 +84,20 @@ export function reducer(state = initialState, action: AspectActions): fromAspect
           error: ''
         }
 
+      case AspectActionTypes.SetAspectsSuccess:
+        return {
+          ...state,
+          aspects: action.payload,
+          currentAspectId: action.payload[0].id,
+        }
+
+      case AspectActionTypes.SetAspectsFailure:
+        return {
+          ...state,
+          error: action.payload
+        }
+
+
       default:
         return state;
     }

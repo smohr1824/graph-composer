@@ -46,4 +46,10 @@ export class AspectEffects {
    mergeMap((action: aspectActions.CreateAspect) =>
    this.aspectService.saveAspect(action.payload).pipe(map((asp: Aspect) =>
    (new aspectActions.CreateAspectSuccess(action.payload))))));
+
+   @Effect()
+   setAspects$ = this.actions$.pipe(ofType(aspectActions.AspectActionTypes.SetAspects),
+   mergeMap((action: aspectActions.SetAspects) => 
+   this.aspectService.setAspects(action.payload).pipe(map((asps: Aspect[]) => 
+   (new aspectActions.SetAspectsSuccess(action.payload))))));
 }

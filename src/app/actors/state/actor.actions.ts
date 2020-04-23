@@ -102,7 +102,7 @@ export class SaveActors implements Action {
 export class SaveActorsSuccess implements Action {
     readonly type = ActorActionTypes.SaveActorsSuccess;
 
-    constructor(public paload: number) { }
+    constructor(public payload: Actor[]) { }
 }
 
 export class SaveActorsFailure implements Action {

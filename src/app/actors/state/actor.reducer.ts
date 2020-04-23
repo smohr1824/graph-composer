@@ -64,7 +64,7 @@ export function reducer(state = initialState, action: ActorActions): fromActors.
       case ActorActionTypes.SaveActorsSuccess:
         return {
           ...state,
-          actors: [...s],
+          actors: action.payload,
           error: ''
         }
 

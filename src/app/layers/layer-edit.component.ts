@@ -93,18 +93,18 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       console.log('layer: ' + this.layer);
-      if (this.layer == null) {
-        console.log('layer is null, netname is ' + this.netname);
-        // is the layer saved to local storage?
-        if (this.netname != null && this.netname != '') {
-          let key: string = this.netname + ':' + id;
-          console.log(key);
-          localforage.getItem(key, layer => {
-            this.layer = layer;
-          });
+      // if (this.layer == null) {
+      //   console.log('layer is null, netname is ' + this.netname);
+      //   // is the layer saved to local storage?
+      //   if (this.netname != null && this.netname != '') {
+      //     let key: string = this.netname + ':' + id;
+      //     console.log(key);
+      //     localforage.getItem(key, layer => {
+      //       this.layer = layer;
+      //     });
 
-        }
-      }
+      //   }
+      // }
 
       this.create = false;
       if (this.layer != null) {

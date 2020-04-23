@@ -52,6 +52,11 @@ export class AspectService {
     }
     return false;
   }
+
+  setAspects(aspects: Aspect[]): Observable<Aspect[]> {
+    ASPECTS = aspects;
+    return of(ASPECTS);
+  }
 }
 
 let ASPECTS = [

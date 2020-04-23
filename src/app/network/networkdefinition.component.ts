@@ -48,16 +48,27 @@ export class NetworkdefinitionComponent implements OnInit {
     this.store.dispatch(new netactions.SetNetworkRule(this.network.modifiedKosko));
 
     let ml:MLFCM;
-    localforage.getItem(this.network.name, s => {ml = s;} );
-    if (ml != null) {
-      this.updateGlobal(ml);
-    }
+    console.log('checking for network state, name= ' + this.network.name);
+    localforage.getItem(this.network.name, (err, s: MLFCM) => {
+      ml = s; if (ml != null) {
+        this.updateGlobal(ml);
+      }
+    });
+
   }
 
   updateGlobal(ml: MLFCM) {
-    //this.aspectStore.dispatch(aspectActions.s);
+    console.log('in updateGlobal');
+    this.aspectStore.dispatch(new aspectActions.SetAspects(ml.aspects));
     this.actorStore.dispatch(new actorActions.SaveActors(ml.actors));
-    //this.layerStore.dispatch(new layerActions.s)
+    this.layerStore.dispatch(new layerActions.SetLayers(ml.layers));
+    this.store.dispatch(new netactions.SetNetworkName(ml.name));
+    this.store.dispatch(new netactions.SetNetworkThreshold(ml.threshold));
+    this.store.dispatch(new netactions.SetNetworkRule(ml.modifiedKosko));
+
+    this.network.name = ml.name;
+    this.network.threshold = ml.threshold;
+    this.network.modifiedKosko = ml.modifiedKosko;
   }
 
 }

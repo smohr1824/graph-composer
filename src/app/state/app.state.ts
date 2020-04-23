@@ -18,6 +18,12 @@ export interface State {
     layers: ElementaryLayerState;
 }
 
+// Over time, it has become apparent that durable state will stay on the client in
+// application local storage, and REST calls to the service will be made outside the NGRX
+// framework. Consequently, we could have forgone the effects and the local type-specific
+// services and done all the work in the reducers. We are storing state twice; once in NGRX
+// and once in the services. We will leave this alone for now in case we need to migrate
+// the REST calls.
 export const reducers: ActionReducerMap<State> = {
     network: networkReducer.reducer,
     aspects: aspectReducer.reducer,

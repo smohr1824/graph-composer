@@ -61,6 +61,13 @@ export function reducer(state = initialState, action: LayerActions): fromLayers.
           error: ''
         }
 
+      case LayerActionTypes.SetLayersSuccess:
+        return {
+          ...state,
+          layers: action.payload,
+          error: ''
+        }
+
       default:
         return state;
     }

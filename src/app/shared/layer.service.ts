@@ -49,6 +49,11 @@ export class LayerService {
     }
   }
 
+  setLayers(layers: ElementaryLayer[]): Observable<ElementaryLayer[]> {
+    LAYERS = layers;
+    return of(layers);
+  }
+
 }  
 
 let LAYERS: ElementaryLayer[] = [ ];

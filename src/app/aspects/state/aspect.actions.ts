@@ -22,7 +22,10 @@ export enum AspectActionTypes {
     DeleteAspectFailure = '[Aspect] Delete Aspect Failure',
     UpdateAspect = '[Aspect] Update Aspect',
     UpdateAspectSuccess = '[Aspect] Update Aspect Success',
-    UpdateAspectFailure = '[Aspect] Update Aspect Failure'
+    UpdateAspectFailure = '[Aspect] Update Aspect Failure',
+    SetAspects = '[Aspect] Set Aspects',
+    SetAspectsSuccess = '[Aspect] Set Aspects Success',
+    SetAspectsFailure = '[Aspect] Set Aspects Failure'
 }
 
 // action class denoting an action only, i.e., no payload
@@ -103,6 +106,24 @@ export class UpdateAspectFailure implements Action {
     constructor(public payload: string) { }
 }
 
+export class SetAspects implements Action {
+    readonly type = AspectActionTypes.SetAspects;
+
+    constructor(public payload: Aspect[]) { }
+}
+
+export class SetAspectsSuccess implements Action {
+    readonly type = AspectActionTypes.SetAspectsSuccess;
+
+    constructor(public payload: Aspect[]) { }
+}
+
+export class SetAspectsFailure implements Action {
+    readonly type = AspectActionTypes.SetAspectsFailure;
+
+    constructor(public payload: string) { }
+}
+
 export type AspectActions = LoadAspects
     | LoadAspects
     | LoadAspectsSuccess
@@ -116,5 +137,8 @@ export type AspectActions = LoadAspects
     | DeleteAspectFailure
     | UpdateAspect
     | UpdateAspectSuccess
-    | UpdateAspectFailure;
+    | UpdateAspectFailure
+    | SetAspects
+    | SetAspectsSuccess
+    | SetAspectsFailure;
 
