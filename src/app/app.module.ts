@@ -17,12 +17,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { reducers } from './state/app.state';
 import { NetworkModule } from './network/network.module';
+import { ExecutionModule } from './execution/execution.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    NavbarComponent
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,6 +31,7 @@ import { NetworkModule } from './network/network.module';
     AspectModule,
     ActorModule,
     LayersModule,
+    ExecutionModule,
     SharedModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
