@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +28,7 @@ import { ExecutionModule } from './execution/execution.module';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     NetworkModule,
     AspectModule,
     ActorModule,

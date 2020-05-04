@@ -2,11 +2,21 @@
     <div class="card-header">
       FCM Execution
     </div>
+    <div class="form-group card-body">
+        <form class="md-4">
+            <div class="form-group row md-2">
+                <label for="name" class="col-md-1 col-form-label">States: </label>
+                <input class="form-control col-md-2" name="stateCt" id="stateCt" [(ngModel)]="genCt" min="1" type="number" placeholder="# of iterations (required)"/>
+            </div>
+        </form>
+        <button class="btn btn-outline-primary btn-sm" (click)="runNetwork()">
+            Get States
+        </button>
+    </div>
     <div class="card-body">
-        <button>Foo</button>
         <div class="row">
             <div class="col-md-4">
-                <!--<app-concepts-list ></app-concepts-list>-->
+                <app-concepts-aggregate [conceptStates]="states" ></app-concepts-aggregate>
             </div>
             <div class="col-md-8">
                 <!--<app-concepts-details ></app-concepts-details>-->

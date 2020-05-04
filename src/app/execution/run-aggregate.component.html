@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-header">
+      {{title}}
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table mb-0"
+                    *ngIf="conceptStates">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Concept</th>
+                            <th>Agg. Value</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    <tr>
+                    <tr *ngFor="let conceptState of conceptStates" (click)="selectState(conceptState)">
+                        <td>
+                            {{ conceptState.generation }}
+                        </td>
+                        <td>
+                            {{ conceptState.name }}
+                        </td>
+                        <td>
+                            {{ conceptState.aggregate.toFixed(2)}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

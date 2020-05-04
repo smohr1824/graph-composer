@@ -17,6 +17,8 @@ import { ActorState } from '../actors/state';
 import { Actor } from '../shared/actor';
 import { Aspect } from '../shared/aspect';
 import { ElementaryLayer } from '../shared/elementary-layer';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-networkdefinition',
@@ -35,7 +37,8 @@ export class NetworkdefinitionComponent implements OnInit {
   constructor(private store: Store<fromState.NetworkState>,
     private aspectStore: Store<AspectState>,
     private actorStore: Store<ActorState>,
-    private layerStore: Store<ElementaryLayerState> ) { }
+    private layerStore: Store<ElementaryLayerState>,
+    private http: HttpClient ) { }
 
   ngOnInit() {
     let mlname: string;
@@ -117,6 +120,12 @@ export class NetworkdefinitionComponent implements OnInit {
   upload() {
     let gml: HTMLTextAreaElement =  document.querySelector("#gml");
     gml.value = this.writeNetworkGML(this.getGlobalState());
+
+    let xUrl = environment.apiUrl + '/' + this.network.name;
+    this.http.post(xUrl, gml.value).subscribe({
+      next: data => console.log('ok' + data),
+      error: error => console.log(error)
+    });
   }
   writeNetworkGML(ml: MLFCM): string {
 
