@@ -21,10 +21,10 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-4">
-                <app-concepts-aggregate [conceptStates]="states" ></app-concepts-aggregate>
+                <app-concepts-aggregate [conceptStates]="states" (conceptSelected)="select($event)"></app-concepts-aggregate>
             </div>
             <div class="col-md-8">
-                <!--<app-concepts-details ></app-concepts-details>-->
+                <app-concepts-details [conceptState]="currentState"></app-concepts-details>
             </div>
         </div>
     </div>  

@@ -6,13 +6,15 @@ import { RunAggregateComponent } from './run-aggregate.component';
 import { FormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { ExecutionEffects } from './state/execution.effects';
+import { RunLayersComponent } from './run-layers.component';
 
 
 
 @NgModule({
   declarations: [
     RunContainerComponent,
-    RunAggregateComponent
+    RunAggregateComponent,
+    RunLayersComponent
   ],
   imports: [
     CommonModule,

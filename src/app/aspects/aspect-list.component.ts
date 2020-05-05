@@ -29,7 +29,7 @@ export class AspectListComponent implements OnInit {
 
   selectAspect(aspect: Aspect) {
     this.aspectSelected.emit(aspect);
-    this.store.dispatch(new aspectActions.SetCurrentAspect(aspect.id));
+    //this.store.dispatch(new aspectActions.SetCurrentAspect(aspect.id));
   }
 
   deleteAspect(id: number) {

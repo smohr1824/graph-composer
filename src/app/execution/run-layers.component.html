@@ -1,0 +1,28 @@
+<div class="card">
+    <div *ngIf="conceptState" class="card-header">
+      {{ conceptState.name }} {{title}}
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table mb-0"
+                    *ngIf="conceptState">
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>Layer Value</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    <tr *ngFor="let levelState of conceptState.levels">
+                        <td>
+                            {{ levelState.coordinates }}
+                        </td>
+                        <td>
+                            {{ levelState.level }}
+                        </td>
+                    </tr>   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

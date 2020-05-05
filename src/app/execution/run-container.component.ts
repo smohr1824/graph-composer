@@ -91,6 +91,10 @@ export class RunContainerComponent implements OnInit, OnDestroy {
     return ml;
   }
 
+  select(state: MultilayerCognitiveConceptState) {
+    this.exStore.dispatch(new executionActions.SetCurrentConcept(state));
+  }
+
   upload() {
     let ml = this.getGlobalState();
     let gml = this.writeNetworkGML(ml);

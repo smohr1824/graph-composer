@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MultilayerCognitiveConceptState, ILayerActivationLevel } from '../shared/cognitivestate';
+import { Store } from '@ngrx/store';
+import * as fromExecution from './state';
+import * as executionActions from './state/execution.actions';
 
 @Component({
   selector: 'app-concepts-aggregate',
@@ -11,13 +14,14 @@ export class RunAggregateComponent implements OnInit {
   private componentActive: boolean = true;
   @Input() conceptStates: MultilayerCognitiveConceptState[];
   @Output() conceptSelected = new EventEmitter<MultilayerCognitiveConceptState>();
-  constructor() { }
+  constructor(private exStore: Store<fromExecution.ExecutionState>) { }
 
   ngOnInit() {
   }
 
   selectState(state: MultilayerCognitiveConceptState) {
     this.conceptSelected.emit(state);
+    //this.exStore.dispatch(new executionActions.SetCurrentConcept(state));
   }
 
 }
