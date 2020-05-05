@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
+import { MultilayerCognitiveConceptState } from '../../shared/cognitivestate';
 
 export enum ExecutionActionTypes {
-    SetCurrentConceptId = '[Execution] Set Current Concept',
+    SetCurrentConceptState = '[Execution] Set Current Concept',
     LoadMap = '[Execution] Load Map',
     LoadMapSuccess = '[Execution] Load Map Success',
     LoadMapFailure = '[Execution] Load Map Failure',
@@ -10,16 +11,16 @@ export enum ExecutionActionTypes {
     ExecuteMapFailure = '[Execution] Execute Map Failure'
 }
 
-export class SetCurrentConceptId implements Action {
-    readonly type = ExecutionActionTypes.SetCurrentConceptId;
+export class SetCurrentConcept implements Action {
+    readonly type = ExecutionActionTypes.SetCurrentConceptState;
 
-    constructor(public payload: number) { }
+    constructor(public payload: MultilayerCognitiveConceptState) { }
 }
 
 export class LoadMap implements Action {
     readonly type = ExecutionActionTypes.LoadMap;
 
-    constructor(public payload: string) { }
+    constructor(public payload: LoadMapParams) { }
 }
 
 export class LoadMapSuccess implements Action {
@@ -37,13 +38,13 @@ export class LoadMapFailure implements Action {
 export class ExecuteMap implements Action {
     readonly type = ExecutionActionTypes.ExecuteMap;
 
-    constructor(public payload: number) { }
+    constructor(public payload: ExecuteMapParams) { }
 }
 
 export class ExecuteMapSuccess implements Action {
     readonly type = ExecutionActionTypes.ExecuteMapSuccess;
 
-    constructor(public payload: number[]) { } // TODO: DEFINE TYPE
+    constructor(public payload: MultilayerCognitiveConceptState[]) { } 
 }
 
 export class ExecuteMapFailure implements Action {
@@ -52,7 +53,27 @@ export class ExecuteMapFailure implements Action {
     constructor(public payload: string) { }
 }
 
-export type ExecutionActions = SetCurrentConceptId 
+export class LoadMapParams {
+    NetworkName: string;
+    GML: string;
+
+    constructor(name: string, defn: string) {
+        this.NetworkName = name;
+        this.GML = defn;
+    }
+}
+
+export class ExecuteMapParams {
+    NetworkName: string;
+    Generations: number;
+
+    constructor(name: string, count: number) {
+        this.NetworkName = name;
+        this.Generations = count;
+    }
+}
+
+export type ExecutionActions = SetCurrentConcept 
     | LoadMap
     | LoadMapSuccess
     | LoadMapFailure

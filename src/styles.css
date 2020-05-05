@@ -13,3 +13,14 @@ div.card-header {
    .table {
      margin-top: 10px
    }
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    padding-left: 12px;
+}
+
+.app-btn-offset {
+  margin-left: 10px;
+  margin-right: 10px;
+}

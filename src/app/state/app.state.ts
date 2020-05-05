@@ -4,11 +4,13 @@ import { AspectState } from '../aspects/state';
 import { ActorState } from '../actors/state';
 import { ElementaryLayerState } from '../layers/state';
 import { NetworkState } from '../network/state';
+import { ExecutionState } from '../execution/state';
 
 import * as aspectReducer from '../aspects/state/aspect.reducer';
 import * as actorReducer from '../actors/state/actor.reducer';
 import * as layerReducer from '../layers/state/layer.reducer';
 import * as networkReducer from '../network/state/network.reducer';
+import * as executionReducer from '../execution/state/execution.reducer';
 
 
 export interface State {
@@ -16,6 +18,7 @@ export interface State {
     aspects: AspectState;
     actors: ActorState;
     layers: ElementaryLayerState;
+    execution: ExecutionState;
 }
 
 // Over time, it has become apparent that durable state will stay on the client in
@@ -28,6 +31,7 @@ export const reducers: ActionReducerMap<State> = {
     network: networkReducer.reducer,
     aspects: aspectReducer.reducer,
     actors: actorReducer.reducer,
-    layers: layerReducer.reducer
+    layers: layerReducer.reducer,
+    execution: executionReducer.reducer
 }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MultilayerCognitiveConceptState, ILayerActivationLevel } from './state';
+import { MultilayerCognitiveConceptState, ILayerActivationLevel } from '../shared/cognitivestate';
 
 @Component({
   selector: 'app-concepts-aggregate',

@@ -9,9 +9,14 @@
                 <input class="form-control col-md-2" name="stateCt" id="stateCt" [(ngModel)]="genCt" min="1" type="number" placeholder="# of iterations (required)"/>
             </div>
         </form>
-        <button class="btn btn-outline-primary btn-sm" (click)="runNetwork()">
-            Get States
-        </button>
+        <div class="form-group">
+            <button name="writeBtn" (click)="upload()" class="btn btn-outline-primary btn-sm">Upload</button>
+            <button class="btn btn-outline-primary btn-sm app-btn-offset"  (click)="runNetwork()">
+                Get States
+            </button>
+            <span class="error-message" *ngIf="errorMsg !=''">{{errorMsg}}</span>        
+        </div>
+
     </div>
     <div class="card-body">
         <div class="row">

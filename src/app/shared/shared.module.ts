@@ -4,6 +4,7 @@ import {  IdService } from './id.service';
 import { WelcomeComponent } from './welcome.component'
 import { AspectService } from './aspect.service';
 import { LayerService } from './layer.service';
+import { FcmService } from './fcm.service';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { LayerService } from './layer.service';
   providers: [
     IdService,
     AspectService,
-    LayerService
+    LayerService,
+    FcmService
   ]
 })
 export class SharedModule { }
