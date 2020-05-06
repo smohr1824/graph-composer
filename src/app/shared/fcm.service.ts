@@ -11,13 +11,20 @@ export class FcmService {
 
   constructor(private http: HttpClient) { }
 
-  loadMap(netName: string, GML: string): Observable<Object> {
+  loadMap(netName: string, GML: string, existing: boolean): Observable<Object> {
 
       let exUrl = environment.apiUrl + '/' + netName;
-      return this.http.post(exUrl, GML, {
-        headers: new HttpHeaders({
-          'X-Version': '1.0'
-        })});
+      if (!existing) {
+        return this.http.post(exUrl, GML, {
+          headers: new HttpHeaders({
+            'X-Version': '1.0'
+          })});
+      } else {
+        return this.http.put(exUrl, GML, {
+          headers: new HttpHeaders({
+            'X-Version': '1.0'
+          })});
+      }
   }
 
   runGenerations(netName: string, generations: number): Observable<MultilayerCognitiveConceptState[]> {
@@ -31,5 +38,13 @@ export class FcmService {
         'X-Version': '1.0'
       })
     });
+  }
+
+  deleteMapFromServer(netName: string) {
+    let exUrl = environment.apiUrl + '/' + netName;
+      return this.http.delete(exUrl, {
+        headers: new HttpHeaders({
+          'X-Version': '1.0'
+        })});
   }
 }

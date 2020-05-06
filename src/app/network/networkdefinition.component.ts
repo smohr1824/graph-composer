@@ -67,13 +67,15 @@ export class NetworkdefinitionComponent implements OnInit {
     this.store.dispatch(new netactions.SetNetworkRule(this.network.modifiedKosko));
 
     let ml:MLFCM;
-    if (!this.preExisting) {
-      localforage.getItem(this.network.name, (err, s: MLFCM) => {
-        ml = s; if (ml != null) {
+
+    localforage.getItem(this.network.name, (err, s: MLFCM) => {
+      ml = s; if (ml != null) {
           this.updateGlobal(ml);
+          this.preExisting = true;
+        } else {
+          this.preExisting = false;
         }
-      });
-    }
+    });
   }
 
   updateGlobal(ml: MLFCM) {

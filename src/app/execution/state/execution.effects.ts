@@ -23,7 +23,7 @@ export class ExecutionEffects {
       this.fcmService.runGenerations(action.payload.NetworkName, action.payload.Generations).pipe(
         map(states => (new executionActions.ExecuteMapSuccess(states))),
         catchError(err => {
-          return of(new executionActions.ExecuteMapFailure(err.error.message))})
+          return of(new executionActions.ExecuteMapFailure(err))})
       )
     )
   );
@@ -32,9 +32,20 @@ export class ExecutionEffects {
   LoadMap$: Observable<executionActions.ExecutionActions> = this.actions$.pipe(
     ofType(executionActions.ExecutionActionTypes.LoadMap),
     mergeMap((action: executionActions.LoadMap) => 
-      this.fcmService.loadMap(action.payload.NetworkName, action.payload.GML).pipe(
-        map(loaded => (new executionActions.LoadMapSuccess(true))),
-        catchError(err => of(new executionActions.ExecuteMapFailure(err.message)))
+      this.fcmService.loadMap(action.payload.NetworkName, action.payload.GML, action.payload.existing).pipe(
+        map(loaded => (new executionActions.LoadMapSuccess(action.payload.NetworkName))),
+        catchError(err => of(new executionActions.LoadMapFailure(err)))
+      )
+    )
+  );
+
+  @Effect()
+  DeleteMap$: Observable<executionActions.ExecutionActions> = this.actions$.pipe(
+    ofType(executionActions.ExecutionActionTypes.DeleteMap),
+    mergeMap((action) => 
+      this.fcmService.deleteMapFromServer(action.payload).pipe(
+        map(deleted => (new executionActions.DeleteMapSuccess(true))),
+        catchError(err => of(new executionActions.DeleteMapFailure(err)))
       )
     )
   );

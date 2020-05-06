@@ -64,6 +64,10 @@ export class RunContainerComponent implements OnInit, OnDestroy {
     this.exStore.dispatch(new executionActions.ExecuteMap(params));
   }
 
+  deleteNetwork() {
+    this.exStore.dispatch(new executionActions.DeleteMap(this.netName));
+  }
+
   getGlobalState(): MLFCM {
     let ml = new MLFCM();
     this.netStore.pipe(select(fromNetwork.getNetworkName), take(1)).subscribe(
@@ -99,7 +103,7 @@ export class RunContainerComponent implements OnInit, OnDestroy {
     let ml = this.getGlobalState();
     let gml = this.writeNetworkGML(ml);
     let paramsY: executionActions.ExecuteMapParams = new executionActions.ExecuteMapParams(this.netName, this.genCt);
-    let params: executionActions.LoadMapParams = new executionActions.LoadMapParams(ml.name, gml);
+    let params: executionActions.LoadMapParams = new executionActions.LoadMapParams(ml.name, gml, this.loaded);
     this.exStore.dispatch(new executionActions.LoadMap(params));
 
   }
