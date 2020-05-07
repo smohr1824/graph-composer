@@ -1,8 +1,8 @@
 <nav class="navbar navbar-light bg-light" role="toolbar" aria-label="Toolbar with button groups">
-    <div class="btn-group mr-auto" role="group" aria-label="First group">
-      <button type="button" class="btn btn-secondary" (click)="setMode('concept')">+Concept</button>
-      <button type="button" class="btn btn-secondary" (click)="setMode('influence')">+Influence</button>
-      <button type="button" class="btn btn-secondary" (click)="setMode('delete')">Delete</button>
+    <div class="form-group mr-auto" role="group" aria-label="First group">
+      <button type="button" class="btn btn-outline-secondary btn-sm app-btn-offset" (click)="setMode('concept')">+Concept</button>
+      <button type="button" class="btn btn-outline-primary btn-sm app-btn-offset" (click)="setMode('influence')">+Influence</button>
+      <button type="button" class="btn btn-outline-primary btn-sm app-btn-offset" (click)="setMode('delete')">Delete</button>
     </div>
     
     <form  *ngIf="create" [formGroup]="vectorForm" class="form-inline my-2 my-lg-0" role="group" aria-label="Aspect group">
@@ -25,8 +25,9 @@
         </div>
       </div>
     </form>
-    <div class="btn-group mr-auto" role="group" aria-label="Third group">
-      <button type="button" class="btn btn-secondary" (click)='writeLayer()'>Save</button>
+    <div class="form-group mr-auto" role="group" aria-label="Third group">
+      <button type="button" class="btn btn-secondary btn-sm app-btn-offset" (click)='writeLayer()'>Save</button>
+      <button type="button" class="btn btn-secondary btn-sm app-btn-offset" (click)='leaveLayer()'>Cancel</button>
     </div>
 </nav>
 <hr/>

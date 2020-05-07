@@ -27,6 +27,13 @@ separate hosting of the service and this application. Update the REST API URL in
 
 The server is implemented using the [C# repository](https://github.com/smohr1824/Graphs). An equivalent service using the [Go repository](https://github.com/smohr1824/Networks) is anticipated to offer the concurrent methods implemented therein. 
 
+## Known Issues
+1. The underlying ML FCM code in the Graphs repository does not permit proper deserialization of
+networks with concept names including whitespace. For example "Public concern" must be "Public_concern".
+2. Changing the name of a concept in the Actors page when the concept is used in an elementary layer does not change the displayed name in the elementary layer. You must delete the node, then
+add it again.
+3. Movement of nodes on an elementary layer is not yet supported.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

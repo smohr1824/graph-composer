@@ -152,6 +152,10 @@ export class RunContainerComponent implements OnInit, OnDestroy {
       GML += this.writeLayer(elayer, '\t');
     })
     GML += ']';
+
+    // uncomment with HTML for debugging GML
+    //var x = document.getElementById("gml");
+    //x.innerHTML = GML;
     return GML;
   }
 

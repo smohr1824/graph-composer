@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import * as localforage from 'localforage';
-import { fromEvent, Subscription } from 'rxjs';
-import { map, takeWhile, take } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { takeWhile, take } from 'rxjs/operators';
 import { Aspect } from '../shared/aspect';
 import { Actor } from '../shared/actor';
 import { IdService } from '../shared/id.service';
@@ -16,7 +16,7 @@ import { Concept } from '../shared/concept';
 
 // NgRx-related state management
 import { Store, select } from '@ngrx/store';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ElementaryLayer } from '../shared/elementary-layer';
 import { LayerActionTypes } from './state/layer.actions';
 import { State } from '../state/app.state';
@@ -60,6 +60,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private actorState: Store<fromActors.ActorState>, 
     private store: Store<fromLayers.ElementaryLayerState>,
     private fb: FormBuilder,
+    private router: Router,
     private idSvc: IdService ) { }
 
   ngOnInit() {
@@ -208,6 +209,12 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       localforage.setItem(ml.name, ml);
     }
 
+    this.router.navigate(['layers']);
+
+  }
+
+  leaveLayer() {
+    this.router.navigate(['layers']);
   }
 
   clickCanvas(evt: MouseEvent){

@@ -5,7 +5,7 @@
     <div class="card-body">
       <div class="table-responsive">
         <table class="table mb-0"
-               *ngIf="aspects && aspects.length">
+               >
           <tbody>
             <tr *ngFor="let aspect of aspects" (click)="selectAspect(aspect)">
               <td>
@@ -24,6 +24,9 @@
                 </button>
               </td>
             </tr>
+
+          </tbody>
+          <tfoot>
             <tr>
               <td>
                 <button class="btn btn-primary btn-sm"
@@ -32,8 +35,9 @@
                 </button>
               </td>
               <td></td>
+              <td></td>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </div>
     </div>

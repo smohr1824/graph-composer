@@ -9,11 +9,6 @@ import { AspectService } from 'src/app/shared/aspect.service';
 import * as aspectActions from './aspect.actions';
 import { Aspect } from '../../shared/aspect';
 
-
-// TODO: We are maintaining state in two places because we have no backing service.
-// TODO: Replace ASPECTS with calls to a backing service. Aspect creation/deletion will be local only
-// (no call to serve, no Effect). Only an initial call to load a ML FCM or save a locally
-// created on will involve a call to the service.
 @Injectable()
 export class AspectEffects {
     constructor(private actions$: Actions, private aspectService: AspectService) {

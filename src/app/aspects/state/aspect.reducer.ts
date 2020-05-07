@@ -2,24 +2,10 @@ import { Aspect } from '../../shared/aspect';
 import { AspectActionTypes, AspectActions } from './aspect.actions';
 import * as fromAspects from '.';
 
-const ASPECTS = [
-    {
-      name: 'System',
-      id: 0,
-      layerSet: ['flow', 'electrical', 'control']
-    },
-    {
-      name: 'Location',
-      id: 1,
-      layerSet: ['SLTC', 'PHL', 'PHX', 'JC']
-    }
-  ]
-
-
 
 const initialState = {
     currentAspectId: 0,
-    aspects: ASPECTS,
+    aspects: [],
     error: ''
 }
 
