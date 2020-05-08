@@ -287,17 +287,13 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addNode(name: string, x: number, y: number, initial: number): number {
     let node = new data.Node();
-    node.concept = new Concept();
-    let found = this.nodes.find(node => node.concept.name === name);
+    
     let actor = this.actors.find(item => item.name === name);
+    let found = this.nodes.find(node => node.id === actor.id);
     if (found == undefined) {
 
       if (actor != null) {
-        node.concept.name = actor.name;
-        node.concept.id = actor.id;
         node.id = actor.id;
-        node.concept.initial = initial;
-        node.concept.level = initial;
       } else {
         node.id = this.idSvc.nextActorId();
       }
@@ -349,38 +345,40 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addEdge(src: string, tgt: string, wt: number): number {
-    let srcActor = this.nodes.find(actor => actor.concept.name === src);
-    let tgtActor = this.nodes.find(actor => actor.concept.name === tgt);
+    let srcActor = this.actors.find(actor => actor.name === src);
+    let tgtActor = this.actors.find(actor => actor.name === tgt);
+    let srcNode = this.nodes.find(node => node.id === srcActor.id);
+    let tgtNode = this.nodes.find(node => node.id === tgtActor.id);
 
 
-    let reciprocalEdge = this.edges.find(edge => edge.source === tgtActor.id && edge.target === srcActor.id);
-    if (srcActor != null && tgtActor != null && srcActor.id != tgtActor.id) {
+    let reciprocalEdge = this.edges.find(edge => edge.source === tgtNode.id && edge.target === srcNode.id);
+    if (srcNode != null && tgtNode != null && srcNode.id != tgtNode.id) {
       let edge = new data.Edge();
-      let preexisting = this.edges.find(edge => edge.source === srcActor.id && edge.target === tgtActor.id);
+      let preexisting = this.edges.find(edge => edge.source === srcNode.id && edge.target === tgtNode.id);
       if (preexisting != null) {
         return -1;
       }
       edge.id = this.idSvc.nextEdgeId();
-      edge.source = srcActor.id;
-      edge.target = tgtActor.id;
+      edge.source = srcNode.id;
+      edge.target = tgtNode.id;
 
-      let theta = Math.atan2(tgtActor.y - srcActor.y, tgtActor.x - srcActor.x);
+      let theta = Math.atan2(tgtNode.y - srcNode.y, tgtNode.x - srcNode.x);
       edge.theta = theta;
 
       if (reciprocalEdge == null) {
-        edge.startX = srcActor.x + RADIUS * Math.cos(theta);
-        edge.startY = srcActor.y + RADIUS * Math.sin(theta);
-        edge.endX = tgtActor.x - RADIUS * Math.cos(theta);
-        edge.endY = tgtActor.y - RADIUS * Math.sin(theta);
+        edge.startX = srcNode.x + RADIUS * Math.cos(theta);
+        edge.startY = srcNode.y + RADIUS * Math.sin(theta);
+        edge.endX = tgtNode.x - RADIUS * Math.cos(theta);
+        edge.endY = tgtNode.y - RADIUS * Math.sin(theta);
       } else {
         // there is an existing reciprocal edge, so offset the new one
         let thetaPrimeSrc = theta + 25 * Math.PI/180;
         let thetaPrimeTgt = theta - 25 * Math.PI/180;
 
-        edge.startX = srcActor.x + RADIUS * Math.cos(thetaPrimeSrc);
-        edge.startY = srcActor.y + RADIUS * Math.sin(thetaPrimeSrc);
-        edge.endX = tgtActor.x - RADIUS * Math.cos(thetaPrimeTgt);
-        edge.endY = tgtActor.y - RADIUS * Math.sin(thetaPrimeTgt);
+        edge.startX = srcNode.x + RADIUS * Math.cos(thetaPrimeSrc);
+        edge.startY = srcNode.y + RADIUS * Math.sin(thetaPrimeSrc);
+        edge.endX = tgtNode.x - RADIUS * Math.cos(thetaPrimeTgt);
+        edge.endY = tgtNode.y - RADIUS * Math.sin(thetaPrimeTgt);
       }
       edge.labelX = edge.startX + (edge.endX - edge.startX)/2;
       edge.labelY = edge.startY + (edge.endY - edge.startY)/2;
@@ -398,7 +396,8 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   redraw() {
     this.cx.clearRect(0, 0, this.canvasEl.width, this.canvasEl.height);
     this.nodes.forEach(node => {
-      this.drawNode(node.x, node.y, node.concept.name, node.concept.initial);
+      let actor = this.actors.find(actor => actor.id === node.id);
+      this.drawNode(node.x, node.y, actor.name, actor.initialLevel);
     });
 
     this.edges.forEach(edge => {
@@ -407,14 +406,15 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   nodeIdfromName(name:string): number {
-    let nodeFound = this.nodes.find(node => node.concept.name === name);
+    let nodeFound = this.actors.find(actor => actor.name === name);
     if (nodeFound) {
-      return nodeFound.concept.id;
+      return nodeFound.id;
     }
   }
 
   nodeFromName(name: string): data.Node {
-    let nodeFound = this.nodes.find(node => node.concept.name === name);
+    let actorFound = this.actors.find(actor => actor.name === name);
+    let nodeFound = this.nodes.find(node => node.id === actorFound.id)
     return nodeFound;
   }
 

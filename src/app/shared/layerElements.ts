@@ -19,7 +19,7 @@ export class Edge {
 }
 
 export class Node {
-    concept: Concept;
+    //concept: Concept;
     id: number;
     x: number;
     y: number;
