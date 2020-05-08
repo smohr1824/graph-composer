@@ -179,7 +179,9 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       coords.push(this.vectorForm.controls[key].value);
     });
 
+    this.GML += '\"';
     this.GML += coords.join(',') + '\r\n';
+    this.GML += '\"';
     this.GML += '\tgraph [\r\n';
     this.GML += '\t\tdirected 1\r\n';
     this.nodes.forEach(node => { 

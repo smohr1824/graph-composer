@@ -160,21 +160,21 @@ export class RunContainerComponent implements OnInit, OnDestroy {
   }
 
   writeAspect(aspect: Aspect): string {
-    let retVal = '\t\t' + aspect.name +'\t';
+    let retVal = '\t\t' + aspect.name +'\t\"';
     aspect.layerSet.forEach((ls, index) =>{
       retVal += ls;
       if (index < aspect.layerSet.length - 1) {
         retVal += ',';
       }
     });
-    retVal += '\r\n';
+    retVal += '\"\r\n';
     return retVal;
   }
 
   writeConcept(actor: Actor, indent:string, layers: string[]): string {
     let retVal = indent + 'concept\t[\r\n';
     retVal += indent + '\tid\t' + actor.id.toFixed() + '\r\n';
-    retVal += indent + '\tlabel\t' + actor.name + '\r\n';
+    retVal += indent + '\tlabel\t\"' + actor.name + '\"\r\n';
     retVal += indent + '\tinitial\t' + actor.initialLevel.toFixed(5) + '\r\n';
     retVal += indent + '\taggregate\t' + actor.initialLevel.toFixed(5) + '\r\n';
     // write the layer coordinates followed by the initial level
@@ -192,8 +192,8 @@ export class RunContainerComponent implements OnInit, OnDestroy {
   
   writeLayer(layer: ElementaryLayer, indent: string) {
     let retVal = indent + 'layer [\r\n';
-    retVal += indent + '\tcoordinates\t';
-    retVal += layer.coordinates + '\r\n';
+    retVal += indent + '\tcoordinates\t\"';
+    retVal += layer.coordinates + '\"\r\n';
     retVal += indent + '\tgraph [\r\n';
     retVal += indent + '\t\tdirected 1\r\n';
     layer.nodes.forEach(node => { 
