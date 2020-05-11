@@ -6,7 +6,6 @@ import { mergeMap, map, catchError } from 'rxjs/operators';
 import { FcmService } from '../../shared/fcm.service';
 
 /* NgRx */
-import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import * as executionActions from './execution.actions';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as fromState from './state';
 import { MLFCM } from '../shared/mlfcm';
-import { takeWhile, take, flatMap } from 'rxjs/operators';
+import { takeWhile, take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import * as netactions from './state/network.actions';
 import * as aspectActions from '../aspects/state/aspect.actions';
@@ -28,16 +28,11 @@ export class NetworkdefinitionComponent implements OnInit {
   private title = 'Top-Level Definition';
   private network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
   private componentActive = false;
-  private preExisting = false;
-  private actors: Actor[];
-  private aspects: Aspect[];
-  private layers: ElementaryLayer[];
 
   constructor(private store: Store<fromState.NetworkState>,
     private aspectStore: Store<AspectState>,
     private actorStore: Store<ActorState>,
-    private layerStore: Store<ElementaryLayerState>,
-    private http: HttpClient ) { }
+    private layerStore: Store<ElementaryLayerState> ) { }
 
   ngOnInit() {
     let mlname: string;
@@ -45,15 +40,14 @@ export class NetworkdefinitionComponent implements OnInit {
       mlname = name;     
       if (mlname != null && mlname != '') {
         this.network.name = mlname;
-        this.preExisting = true;
         this.store.pipe(select(fromState.getNetworkThreshold), take(1)).subscribe(thresh => {this.network.threshold = thresh;});
         this.store.pipe(select(fromState.getNetworkModified), take(1)).subscribe(mod => this.network.modifiedKosko = mod);
       } 
 
       // set up subscriptions to aspects and layers
-      this.actorStore.pipe(select(fromActors.getActors), takeWhile(() => this.componentActive)).subscribe(acts => this.actors = acts);
-      this.aspectStore.pipe(select(fromAspects.getAspects), takeWhile(() => this.componentActive)).subscribe(asps => this.aspects = asps);
-      this.actorStore.pipe(select(fromLayers.getLayers), takeWhile(() => this.componentActive)).subscribe(lays => this.layers = lays);
+      //this.actorStore.pipe(select(fromActors.getActors), takeWhile(() => this.componentActive)).subscribe(acts => this.actors = acts);
+      //this.aspectStore.pipe(select(fromAspects.getAspects), takeWhile(() => this.componentActive)).subscribe(asps => this.aspects = asps);
+      //this.actorStore.pipe(select(fromLayers.getLayers), takeWhile(() => this.componentActive)).subscribe(lays => this.layers = lays);
     });
   }
 
@@ -71,10 +65,7 @@ export class NetworkdefinitionComponent implements OnInit {
     localforage.getItem(this.network.name, (err, s: MLFCM) => {
       ml = s; if (ml != null) {
           this.updateGlobal(ml);
-          this.preExisting = true;
-        } else {
-          this.preExisting = false;
-        }
+        } 
     });
   }
 

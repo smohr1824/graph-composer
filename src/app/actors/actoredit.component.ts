@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActorService } from '../shared/actor.service';
 import { IdService } from '../shared/id.service';
 import { Actor } from '../shared/actor';
 

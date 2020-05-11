@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActorService } from '../shared/actor.service';
 import { Actor } from '../shared/actor';
 
 // NgRx-related state management
