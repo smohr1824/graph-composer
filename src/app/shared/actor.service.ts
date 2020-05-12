@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Observable, of, from } from 'rxjs';
 import { Actor } from './actor';
+import { mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

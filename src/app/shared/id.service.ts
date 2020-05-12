@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class IdService {
-  private aspectNextId: number = 0;
+  private aspectNextId: number = 2;
   private actorNextId: number = 0;
   private edgeNextId: number = 0;
 
