@@ -11,7 +11,7 @@ export class LayerService {
 
   // eventually, go out to the remote service and load all the layers for the named graph,
   // caching them locally
-  getLayers(network:string): Observable<ElementaryLayer[]> {
+  getLayers(): Observable<ElementaryLayer[]> {
     return of(LAYERS);
   }
 

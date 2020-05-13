@@ -26,7 +26,7 @@ export class LayerEffects {
     @Effect()
     loadLayers$ = this.actions$.pipe(
         ofType(ElementaryLayerActions.LayerActionTypes.LoadLayers),
-        mergeMap((action: ElementaryLayerActions.LoadLayers) => this.layerService.getLayers(action.payload).pipe(
+        mergeMap((action: ElementaryLayerActions.LoadLayers) => this.layerService.getLayers().pipe(
             map((Layers: ElementaryLayer[]) => (new ElementaryLayerActions.LoadLayersSuccess(Layers)))
         ))
     );
