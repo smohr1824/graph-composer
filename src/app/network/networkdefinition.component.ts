@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as fromState from './state';
 import { MLFCM } from '../shared/mlfcm';
-import { takeWhile, take, flatMap } from 'rxjs/operators';
+import { takeWhile, take } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import * as netactions from './state/network.actions';
 import * as aspectActions from '../aspects/state/aspect.actions';
@@ -29,9 +29,6 @@ export class NetworkdefinitionComponent implements OnInit {
   private network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
   private componentActive = false;
   private preExisting = false;
-  private actors: Actor[];
-  private aspects: Aspect[];
-  private layers: ElementaryLayer[];
 
   constructor(private store: Store<fromState.NetworkState>,
     private aspectStore: Store<AspectState>,
@@ -49,11 +46,6 @@ export class NetworkdefinitionComponent implements OnInit {
         this.store.pipe(select(fromState.getNetworkThreshold), take(1)).subscribe(thresh => {this.network.threshold = thresh;});
         this.store.pipe(select(fromState.getNetworkModified), take(1)).subscribe(mod => this.network.modifiedKosko = mod);
       } 
-
-      // set up subscriptions to aspects and layers
-      this.actorStore.pipe(select(fromActors.getActors), takeWhile(() => this.componentActive)).subscribe(acts => this.actors = acts);
-      this.aspectStore.pipe(select(fromAspects.getAspects), takeWhile(() => this.componentActive)).subscribe(asps => this.aspects = asps);
-      this.actorStore.pipe(select(fromLayers.getLayers), takeWhile(() => this.componentActive)).subscribe(lays => this.layers = lays);
     });
   }
 

@@ -12,7 +12,6 @@ export class FcmService {
   constructor(private http: HttpClient) { }
 
   loadMap(netName: string, GML: string, existing: boolean): Observable<Object> {
-
       let exUrl = environment.apiUrl + '/' + netName;
       if (!existing) {
         return this.http.post(exUrl, GML, {

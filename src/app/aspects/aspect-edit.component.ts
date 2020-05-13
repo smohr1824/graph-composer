@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
-import { AspectService } from '../shared/aspect.service';
 import { Aspect } from '../shared/aspect';
 import { IdService } from '../shared/id.service';
 

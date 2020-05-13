@@ -29,6 +29,7 @@ The server is implemented using the [C# repository](https://github.com/smohr1824
 
 ## Known Issues
 1. Movement of nodes on an elementary layer is not yet supported.
+2. Concept, aspect, and layerset names must not have apostrophes or quotation marks embedded in them.  For example, "Bobs Test Concept" is acceptable, but "Bob's Test Concept is not". Embedded marks will cause upload to fail with Bad Request (400) due to parsing errors on the server.
 
 ## Development server
 

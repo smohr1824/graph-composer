@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Aspect } from '../shared/aspect';
-import { AspectService } from '../shared/aspect.service';
 
 // NgRx-related state management
 import { Store, select } from '@ngrx/store';

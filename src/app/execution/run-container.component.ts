@@ -88,7 +88,7 @@ export class RunContainerComponent implements OnInit, OnDestroy {
       s => { ml.actors = s; }
     );
 
-    this.netStore.pipe(select(fromLayers.getLayers), take(1)).subscribe(
+      this.layerStore.pipe(select(fromLayers.getLayers), take(1)).subscribe(
       s => {ml.layers = s; }
     );
 
@@ -108,10 +108,8 @@ export class RunContainerComponent implements OnInit, OnDestroy {
 
   }
   writeNetworkGML(ml: MLFCM): string {
-
     // build a concordance of nodes and the layers in which they appear
     let nodeLayers = this.makeConcordance(ml);
-
     let GML: string = "multilayer_network [\r\n";
     GML += "\tdirected\t1\r\n";
     GML += '\tthreshold\t';
@@ -145,7 +143,12 @@ export class RunContainerComponent implements OnInit, OnDestroy {
     GML += '\t]\r\n';
 
     ml.actors.forEach((actor, index) => {
-      GML += this.writeConcept(actor, '\t', nodeLayers.get(actor.id));
+      let layer = nodeLayers.get(actor.id);
+
+      // catch any unused actors, i.e., defined concepts that never appear in an elementary layer
+      if (layer != undefined) { 
+        GML += this.writeConcept(actor, '\t', nodeLayers.get(actor.id));
+      } 
     });
 
     ml.layers.forEach((elayer, index) => {
