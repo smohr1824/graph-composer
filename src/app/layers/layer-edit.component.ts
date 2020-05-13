@@ -295,7 +295,8 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       if (actor != null) {
         node.id = actor.id;
       } else {
-        node.id = this.idSvc.nextActorId();
+        // actor must be added on the actors page
+        return -1;
       }
       node.x = x;
       node.y = y;
@@ -341,7 +342,7 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cx.fill();
 
       this.setPositive();
-    }
+    } 
   }
 
   addEdge(src: string, tgt: string, wt: number): number {
@@ -349,7 +350,6 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
     let tgtActor = this.actors.find(actor => actor.name === tgt);
     let srcNode = this.nodes.find(node => node.id === srcActor.id);
     let tgtNode = this.nodes.find(node => node.id === tgtActor.id);
-
 
     let reciprocalEdge = this.edges.find(edge => edge.source === tgtNode.id && edge.target === srcNode.id);
     if (srcNode != null && tgtNode != null && srcNode.id != tgtNode.id) {
