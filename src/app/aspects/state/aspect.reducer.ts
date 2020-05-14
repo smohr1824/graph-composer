@@ -74,7 +74,7 @@ export function reducer(state = initialState, action: AspectActions): fromAspect
         return {
           ...state,
           aspects: action.payload,
-          currentAspectId: action.payload[0].id,
+          currentAspectId: action.payload.length > 0? action.payload[0].id : 0,
         }
 
       case AspectActionTypes.SetAspectsFailure:

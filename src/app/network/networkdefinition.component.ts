@@ -53,7 +53,7 @@ export class NetworkdefinitionComponent implements OnInit {
     this.componentActive = false;
   }
 
-  SetDefn() {
+  SetOpen() {
     this.store.dispatch(new netactions.SetNetworkName(this.network.name));
     this.store.dispatch(new netactions.SetNetworkThreshold(this.network.threshold));
     this.store.dispatch(new netactions.SetNetworkRule(this.network.modifiedKosko));
@@ -70,6 +70,12 @@ export class NetworkdefinitionComponent implements OnInit {
     });
   }
 
+  SetDefn() {
+    this.store.dispatch(new netactions.SetNetworkName(this.network.name));
+    this.store.dispatch(new netactions.SetNetworkThreshold(this.network.threshold));
+    this.store.dispatch(new netactions.SetNetworkRule(this.network.modifiedKosko));
+  }
+
   updateGlobal(ml: MLFCM) {
     this.aspectStore.dispatch(new aspectActions.SetAspects(ml.aspects));
     this.actorStore.dispatch(new actorActions.SaveActors(ml.actors));
@@ -81,6 +87,17 @@ export class NetworkdefinitionComponent implements OnInit {
     this.network.name = ml.name;
     this.network.threshold = ml.threshold;
     this.network.modifiedKosko = ml.modifiedKosko;
+  }
+
+  ClearAll() {
+    this.network.name = '';
+    this.network.threshold = fromState.thresholdType.Bivalent;
+    this.network.modifiedKosko = true;
+
+    // clear other state
+    this.layerStore.dispatch(new layerActions.SetLayers([]));
+    this.actorStore.dispatch(new actorActions.SaveActors([]));
+    this.aspectStore.dispatch(new aspectActions.SetAspects([]));
   }
 
   getGlobalState(): MLFCM {
