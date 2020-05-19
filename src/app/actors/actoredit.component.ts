@@ -94,10 +94,16 @@ export class ActorEditComponent implements OnInit, OnDestroy {
 
   checkDirty(): boolean {
     if (this.outActor.name != this.actorForm.value['name']) {
+      console.log('checkDirty');
+      console.log(this.outActor.name);
+      console.log(this.actorForm.value['name']);
       return true;
     }
 
     if (this.outActor.initialLevel != +this.actorForm.value['initialLevel']) {
+      console.log('levels');
+      console.log(this.outActor.initialLevel);
+      console.log(+this.actorForm.value['initialLevel']);
       return true;
     }
   }

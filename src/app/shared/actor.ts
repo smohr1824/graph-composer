@@ -3,4 +3,11 @@ export class Actor {
     id: number;
     initialLevel: number;
     activationLevel: number; 
+
+    constructor() {
+        this.name = '';
+        this.id = 0;
+        this.initialLevel = 0;
+        this.activationLevel = 0;
+    }
 }
