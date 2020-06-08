@@ -16,10 +16,10 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['./aspect-edit.component.css']
 })
 export class AspectEditComponent implements OnInit, OnDestroy {
-  private cardTitle: string;
+  cardTitle: string;
   private aspect: Aspect;
   private outAspect: Aspect = new Aspect();
-  private aspectForm: FormGroup;
+  aspectForm: FormGroup;
   private refForm: FormGroup;
   private componentActive = true;
   private create = false;

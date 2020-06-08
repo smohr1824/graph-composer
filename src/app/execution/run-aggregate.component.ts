@@ -10,7 +10,7 @@ import * as executionActions from './state/execution.actions';
   styleUrls: ['./run-aggregate.component.css']
 })
 export class RunAggregateComponent implements OnInit {
-  private title: string = 'Concept Aggregate Levels';
+  title: string = 'Concept Aggregate Levels';
   private componentActive: boolean = true;
   @Input() conceptStates: MultilayerCognitiveConceptState[];
   @Output() conceptSelected = new EventEmitter<MultilayerCognitiveConceptState>();

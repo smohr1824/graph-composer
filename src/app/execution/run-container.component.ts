@@ -22,13 +22,13 @@ import { Actor } from '../shared/actor';
 })
 export class RunContainerComponent implements OnInit, OnDestroy {
   private network: MLFCM = {name:'', threshold: fromNetwork.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
-  private states: MultilayerCognitiveConceptState[];
-  private currentState: MultilayerCognitiveConceptState;
+  states: MultilayerCognitiveConceptState[];
+  currentState: MultilayerCognitiveConceptState;
   private loaded: boolean;
   private netName: string;
   private componentActive: boolean = true;
-  private genCt: number = 1;
-  private errorMsg: string = '';
+  genCt: number = 1;
+  errorMsg: string = '';
 
   constructor(private netStore: Store<fromNetwork.NetworkState>, 
     private aspectStore: Store<fromAspects.AspectState>,

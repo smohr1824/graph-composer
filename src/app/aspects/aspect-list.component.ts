@@ -11,7 +11,7 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['./aspect-list.component.css']
 })
 export class AspectListComponent implements OnInit {
-  private title: string = "Aspects";
+  title: string = "Aspects";
   private componentActive: boolean = true;
   @Input() aspects: Aspect[];
   @Output() aspectSelected = new EventEmitter<Aspect>();

@@ -25,8 +25,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./networkdefinition.component.css']
 })
 export class NetworkdefinitionComponent implements OnInit {
-  private title = 'Top-Level Definition';
-  private network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
+  title = 'Top-Level Definition';
+  network: MLFCM = {name:'', threshold: fromState.thresholdType.Bivalent, modifiedKosko: true, aspects: [], actors: [], layers: []};
   private componentActive = false;
   private preExisting = false;
 

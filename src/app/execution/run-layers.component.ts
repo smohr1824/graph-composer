@@ -7,8 +7,8 @@ import { MultilayerCognitiveConceptState } from '../shared/cognitivestate';
   styleUrls: ['./run-layers.component.css']
 })
 export class RunLayersComponent implements OnInit {
-  @Input() private conceptState: MultilayerCognitiveConceptState;
-  private title: string = 'Concept Layer Levels';
+  @Input() conceptState: MultilayerCognitiveConceptState;
+  title: string = 'Concept Layer Levels';
 
   constructor() { }
 

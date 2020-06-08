@@ -12,8 +12,9 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['./aspect.component.css']
 })
 export class AspectComponent implements OnInit {
-  private title: String = 'Aspects';
-  private aspects: Aspect[];
+  title: String = 'Aspects';
+  aspects: Aspect[];
+  errorMessage: string;
   private componentActive: boolean = true;
 
   constructor(private store: Store<fromAspects.AspectState>) { }

@@ -19,7 +19,7 @@ import { takeWhile } from 'rxjs/operators';
 export class ActorEditComponent implements OnInit, OnDestroy {
   private actor: Actor;
   private outActor = new Actor();
-  private cardTitle: string;
+  cardTitle: string;
   actorForm: FormGroup;
   private componentActive = true;
   private create = false;

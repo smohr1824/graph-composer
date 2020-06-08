@@ -36,20 +36,20 @@ export class LayerEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private cx: CanvasRenderingContext2D;
   private canvasEl: HTMLCanvasElement
   private targetEl: HTMLHtmlElement;
-  private vectorForm: FormGroup;
-  private actorForm: FormGroup;
-  private targetForm: FormGroup;
+  vectorForm: FormGroup;
+  actorForm: FormGroup;
+  targetForm: FormGroup;
   private componentActive = true;
   private netname: string;
-  private networkProps: fromNetwork.NetworkState;
-  private aspects: Aspect[];
-  private actors: Actor[];
-  private nodes: data.Node[];
-  private edges: data.Edge[];
-  private mode: string = 'concept';
+  // private networkProps: fromNetwork.NetworkState;
+  aspects: Aspect[];
+  actors: Actor[];
+  nodes: data.Node[];
+  edges: data.Edge[];
+  mode: string = 'concept';
   private canvasRect: ClientRect;
-  private create: boolean;
-  private coords: string[];
+  create: boolean;
+  coords: string[];
   private GML: string;
   layer: ElementaryLayer;
 
