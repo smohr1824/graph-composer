@@ -92,12 +92,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              
+              "src/styles.css"
             ],
-            "scripts": [
-
-            ]
+            "scripts": []
           }
         },
         "lint": {
@@ -126,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "graph-composer"
+    }
+  },
+  "defaultProject": "graph-composer",
+  "cli": {
+    "analytics": false
+  }
 }
